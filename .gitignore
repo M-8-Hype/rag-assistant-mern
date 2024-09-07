@@ -246,6 +246,7 @@ fabric.properties
 
 ### Own ###
 
-# Server (TBD)
+# Server
+/server/certificates
 
 # Client (TBD)
