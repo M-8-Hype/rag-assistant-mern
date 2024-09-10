@@ -5,22 +5,19 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter"
 
 const sitemapUrl = 'https://docs.spring.io/spring-boot/sitemap.xml'
 
-export async function getUrlsFromSitemap() {
+async function getUrlsFromSitemap(sitemapUrl) {
     try {
         const response = await fetch(sitemapUrl)
         const xml = await response.text()
         const result = await parseStringPromise(xml)
         const urls = result.urlset.url.map(url => url.loc[0])
-        const filteredUrls = urls.filter(url => !/\d+\.\d+(-\w+)?/.test(url) && !url.includes('api'))
-        const firstTen = filteredUrls.slice(0,10)
-        console.log(firstTen)
-        return firstTen
+        return urls.filter(url => !/\d+\.\d+(-\w+)?/.test(url) && !url.includes('api'))
     } catch (e) {
         console.error('Error fetching or parsing sitemap:', e.message)
     }
 }
 
-export async function scrapeTextFromUrl(url) {
+async function scrapeTextFromUrl(url) {
     try {
         const pTagSelector = "p"
         const loader = new CheerioWebBaseLoader(
@@ -35,7 +32,7 @@ export async function scrapeTextFromUrl(url) {
     }
 }
 
-export async function splitText(text) {
+async function splitText(text) {
     try {
         const splitter = new RecursiveCharacterTextSplitter({
             chunkSize: 1000,
@@ -45,4 +42,14 @@ export async function splitText(text) {
     } catch (e) {
         console.error('Error splitting text:', e.message)
     }
+}
+
+export default async function initializeData() {
+    const urls = await getUrlsFromSitemap(sitemapUrl)
+    const urlChunkPromises = urls.map(async (url) => {
+        const text = await scrapeTextFromUrl(url)
+        return await splitText(text)
+    })
+    const urlChunks = await Promise.all(urlChunkPromises)
+    return urlChunks.flat()
 }
