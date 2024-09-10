@@ -19,21 +19,19 @@
 //     console.log(`App listening on port ${port}.`)
 // })
 
-import { getUrlsFromSitemap, scrapeTextFromUrl, scrapeTextFromUrlLangchain, splitText } from "./database/data-init.js"
+import { getUrlsFromSitemap, scrapeTextFromUrl, splitText } from "./database/data-init.js"
 
 const urls = await getUrlsFromSitemap()
-// const urlTextPromises = urls.map(async (url) => {
-//     const text = await scrapeTextFromUrlLangchain(url)
-//     return text
-// })
-// const urlDocs = await Promise.all(urlTextPromises)
 
-const urlDocs = await scrapeTextFromUrlLangchain(urls[0])
+const urlChunkPromises = urls.map(async (url) => {
+    const text = await scrapeTextFromUrl(url)
+    console.log(`Text length: ${text.length}`)
+    const chunks = await splitText(text)
+    console.log(`Chunk length: ${chunks.length}`)
+    return chunks
+})
 
-console.log(urlDocs.length)
-console.log(urlDocs[0].pageContent.length)
+const urlChunks = await Promise.all(urlChunkPromises)
+const allChunks = urlChunks.flat()
 
-const chunks = await splitText(urlDocs)
-console.log(chunks.length)
-console.log(chunks[0].pageContent.length)
-console.log(chunks[0].pageContent)
+console.log(allChunks.length)

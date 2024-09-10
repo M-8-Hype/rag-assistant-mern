@@ -1,4 +1,3 @@
-import * as cheerio from 'cheerio'
 import fetch from 'node-fetch'
 import { parseStringPromise } from 'xml2js'
 import { CheerioWebBaseLoader } from "@langchain/community/document_loaders/web/cheerio"
@@ -13,27 +12,15 @@ export async function getUrlsFromSitemap() {
         const result = await parseStringPromise(xml)
         const urls = result.urlset.url.map(url => url.loc[0])
         const filteredUrls = urls.filter(url => !/\d+\.\d+(-\w+)?/.test(url) && !url.includes('api'))
-        const onlyFirst = filteredUrls.slice(0,1)
-        console.log(onlyFirst)
-        return onlyFirst
+        const firstTen = filteredUrls.slice(0,10)
+        console.log(firstTen)
+        return firstTen
     } catch (e) {
         console.error('Error fetching or parsing sitemap:', e.message)
     }
 }
 
 export async function scrapeTextFromUrl(url) {
-    try {
-        const response = await fetch(url)
-        const html = await response.text()
-        const $ = cheerio.load(html)
-        const text = $('body').text().trim()
-        return text
-    } catch (e) {
-        console.error('Error scraping text from URL:', e.message)
-    }
-}
-
-export async function scrapeTextFromUrlLangchain(url) {
     try {
         const pTagSelector = "p"
         const loader = new CheerioWebBaseLoader(
@@ -42,18 +29,20 @@ export async function scrapeTextFromUrlLangchain(url) {
                 selector: pTagSelector,
             }
         )
-        const docs = await loader.load()
-        return docs
+        return await loader.load()
     } catch (e) {
         console.error('Error scraping text from URL:', e.message)
     }
 }
 
-export async function splitText(docs) {
-    const splitter = new RecursiveCharacterTextSplitter({
-        chunkSize: 1000,
-        chunkOverlap: 200
-    })
-    const chunks = await splitter.splitDocuments(docs)
-    return chunks
+export async function splitText(text) {
+    try {
+        const splitter = new RecursiveCharacterTextSplitter({
+            chunkSize: 1000,
+            chunkOverlap: 200
+        })
+        return await splitter.splitDocuments(text)
+    } catch (e) {
+        console.error('Error splitting text:', e.message)
+    }
 }
