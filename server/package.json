@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/M-8-Hype/rag-assistant-mern#readme",
   "dependencies": {
+    "@langchain/community": "^0.2.32",
+    "cheerio": "^1.0.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "langchain": "^0.2.18",
