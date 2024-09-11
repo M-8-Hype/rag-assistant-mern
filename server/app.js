@@ -2,7 +2,8 @@ import express from 'express'
 import fs from 'fs'
 import https from 'https'
 import llmAnswersRoute from './routes/llm-answers.route.js'
-import initializeData from "./database/data-init.js"
+import initializeData from './database/data-init.js'
+import { startQdrant } from "./database/embedding.js"
 
 const app = express()
 const key = fs.readFileSync('./certificates/key.pem')
@@ -17,6 +18,7 @@ app.get('/', (req, res) => {
 app.use('/api/llm-answers', llmAnswersRoute)
 
 async function startServer() {
+    await startQdrant()
     const dataAvailable = true
     if (!dataAvailable) {
         const allChunks = await initializeData()
