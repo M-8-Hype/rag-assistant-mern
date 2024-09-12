@@ -11,7 +11,7 @@ async function getUrlsFromSitemap(sitemapUrl) {
         const xml = await response.text()
         const result = await parseStringPromise(xml)
         const urls = result.urlset.url.map(url => url.loc[0])
-        return urls.filter(url => !/\d+\.\d+(-\w+)?/.test(url) && !url.includes('api'))
+        return urls.filter(url => !/\d+\.\d+(-\w+)?/.test(url) && !url.includes('api')).slice(0,10)
     } catch (e) {
         console.error('Error fetching or parsing sitemap:', e.message)
     }
@@ -32,7 +32,7 @@ async function scrapeTextFromUrl(url) {
     }
 }
 
-async function splitText(text) {
+async function chunkText(text) {
     try {
         const splitter = new RecursiveCharacterTextSplitter({
             chunkSize: 1000,
@@ -44,12 +44,19 @@ async function splitText(text) {
     }
 }
 
+async function formatTextFromChunk(chunk) {
+    const text = chunk.pageContent
+    const source = chunk.metadata.source
+    return `Context: ${text}; Source: ${source}`
+}
+
 export default async function initializeData() {
     const urls = await getUrlsFromSitemap(sitemapUrl)
-    const urlChunkPromises = urls.map(async (url) => {
+    const formattedChunkPromises = urls.map(async (url) => {
         const text = await scrapeTextFromUrl(url)
-        return await splitText(text)
+        const chunks = await chunkText(text)
+        return await Promise.all(chunks.map(chunk => formatTextFromChunk(chunk)))
     })
-    const urlChunks = await Promise.all(urlChunkPromises)
-    return urlChunks.flat()
+    const formattedChunks = await Promise.all(formattedChunkPromises)
+    return formattedChunks.flat()
 }

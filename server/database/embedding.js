@@ -1,5 +1,6 @@
 import Docker from 'dockerode'
 import { QdrantClient } from "@qdrant/js-client-rest"
+import { pipeline } from '@xenova/transformers'
 
 const QDRANT_HTTP_PORT = process.env.QDRANT_HTTP_PORT || 6333
 const QDRANT_GRPC_PORT = process.env.QDRANT_GRPC_PORT || 6334
@@ -79,6 +80,14 @@ export async function createQdrantCollection(name) {
     } catch (e) {
         console.error(`Error creating Qdrant collection: ${e.message}`)
     }
+}
+
+export async function createEmbeddings(chunks) {
+    const extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2')
+    return await extractor(chunks, {
+        pooling: 'mean',
+        normalize: true
+    })
 }
 
 // async function stopQdrant() {
