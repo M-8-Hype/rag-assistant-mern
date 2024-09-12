@@ -1,6 +1,11 @@
 import Docker from 'dockerode'
+import { QdrantClient } from "@qdrant/js-client-rest"
+
+const QDRANT_HTTP_PORT = process.env.QDRANT_HTTP_PORT || 6333
+const QDRANT_GRPC_PORT = process.env.QDRANT_GRPC_PORT || 6334
 
 const docker = new Docker()
+const client = new QdrantClient({ host: "localhost", port: QDRANT_HTTP_PORT })
 
 export async function startQdrant() {
     try {
@@ -37,11 +42,14 @@ export async function startQdrant() {
             const container = await docker.createContainer({
                 Image: 'qdrant/qdrant',
                 name: 'qdrant',
-                ExposedPorts: { '6333/tcp': {}, '6334/tcp': {} },
+                ExposedPorts: {
+                    [`${QDRANT_HTTP_PORT}/tcp`]: {},
+                    [`${QDRANT_GRPC_PORT}/tcp`]: {}
+                },
                 HostConfig: {
                     PortBindings: {
-                        '6333/tcp': [{ HostPort: '6333' }],
-                        '6334/tcp': [{ HostPort: '6334' }]
+                        [`${QDRANT_HTTP_PORT}/tcp`]: [{ HostPort: `${QDRANT_HTTP_PORT}` }],
+                        [`${QDRANT_GRPC_PORT}/tcp`]: [{ HostPort: `${QDRANT_GRPC_PORT}` }]
                     },
                     Binds: [`${process.cwd()}/qdrant_storage:/qdrant/storage`],
                 }
@@ -54,24 +62,43 @@ export async function startQdrant() {
     }
 }
 
+export async function createQdrantCollection(name) {
+    try {
+        const exists = (await client.collectionExists(name)).exists
+        if (!exists) {
+            await client.createCollection(name, {
+                vectors: {
+                    size: 384,
+                    distance: 'Cosine'
+                }
+            })
+            console.log(`Collection ${name} has been created.`)
+        } else {
+            console.log(`Collection ${name} already exists.`)
+        }
+    } catch (e) {
+        console.error(`Error creating Qdrant collection: ${e.message}`)
+    }
+}
+
 // async function stopQdrant() {
 //     try {
-//         const container = docker.getContainer('qdrant');
-//         const containerInfo = await container.inspect();
+//         const container = docker.getContainer('qdrant')
+//         const containerInfo = await container.inspect()
 //
 //         if (containerInfo.State.Running) {
-//             await container.stop();
-//             console.log('Qdrant container stopped.');
+//             await container.stop()
+//             console.log('Qdrant container stopped.')
 //         } else {
-//             console.log('Qdrant container is not running.');
+//             console.log('Qdrant container is not running.')
 //         }
 //     } catch (error) {
-//         console.error(`Error stopping Qdrant container: ${error.message}`);
+//         console.error(`Error stopping Qdrant container: ${error.message}`)
 //     }
 // }
 //
 // process.on('SIGINT', async () => {
-//     console.log('Caught interrupt signal (SIGINT)');
-//     await stopQdrant();
-//     process.exit(0);
-// });
+//     console.log('Caught interrupt signal (SIGINT)')
+//     await stopQdrant()
+//     process.exit(0)
+// })

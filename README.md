@@ -33,3 +33,35 @@ To enable HTTPS for your local development environment, you'll need to generate 
    ```
 
    This command creates a certificate (cert.pem) that is valid for 365 days.
+
+### 2. Starting Qdrant
+
+To start Qdrant, ensure that Docker Desktop and/or the Docker daemon are running. The application uses Docker to manage the Qdrant container. By default, Qdrant uses the following ports:
+
+- **HTTP Port**: 6333
+- **gRPC Port**: 6334
+
+These ports can be adjusted by modifying the corresponding entries in the `.env` file:
+
+```plaintext
+QDRANT_HTTP_PORT=your_custom_http_port
+QDRANT_GRPC_PORT=your_custom_grpc_port
+```
+
+Make sure to restart the application after making any changes to the `.env` file to apply the new port settings.
+
+#### Notes for Different Operating Systems
+
+- **Windows**: Ensure that Docker Desktop is running and configured properly. Use PowerShell or Command Prompt to manage Docker commands.
+- **MacOS**: Docker Desktop should be installed and running. Use the Terminal to execute Docker commands.
+- **Linux**: Ensure the Docker daemon is running. You may need to use `sudo` for Docker commands depending on your user permissions.
+
+#### Stopping the Docker Container
+
+When terminating the Node server, the Docker container running Qdrant needs to be stopped manually. You can do this by pressing the corresponding button in Docker Desktop or by running the following command in your terminal:
+
+```bash
+docker stop qdrant
+```
+
+This ensures that all resources are released properly and the container does not continue running in the background.

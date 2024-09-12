@@ -1,7 +1,4 @@
-import dotenv from 'dotenv'
 // import { PromptTemplate } from 'langchain'
-
-dotenv.config();
 
 const llmApiKey = process.env.LLM_API_KEY
 
