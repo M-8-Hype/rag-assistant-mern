@@ -4,7 +4,7 @@ import fs from 'fs'
 import https from 'https'
 import llmAnswersRoute from './routes/llm-answers.route.js'
 import initializeData from './database/data-init.js'
-import { startQdrant, createQdrantCollection, createEmbeddings, upsertEmbeddings } from "./database/embedding.js"
+import { startQdrant, createQdrantCollection, createEmbeddings, upsertEmbeddings, queryDatabase } from "./database/embedding.js"
 
 const app = express()
 const key = fs.readFileSync('./certificates/key.pem')
@@ -29,8 +29,11 @@ async function startServer() {
             const chunks = await initializeData()
             console.log(chunks.length)
             const embeddings = await createEmbeddings(chunks)
+            const query = await queryDatabase('shutdown hook for the logging system', collectionName)
+            console.log(query.points[0].payload.text)
+            console.log(query.points)
             console.log('Embeddings created.')
-            await upsertEmbeddings(chunks, embeddings, collectionName)
+            await upsertEmbeddings(chunks, embeddings, collectionName, false)
         } catch (e) {
             console.error(`Error creating embeddings: ${e.message}`)
         }

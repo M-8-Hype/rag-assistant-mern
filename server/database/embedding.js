@@ -7,6 +7,7 @@ const QDRANT_GRPC_PORT = process.env.QDRANT_GRPC_PORT || 6334
 
 const docker = new Docker()
 const client = new QdrantClient({ host: "localhost", port: QDRANT_HTTP_PORT })
+const extractorPromise = pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2')
 
 export async function startQdrant() {
     try {
@@ -84,7 +85,7 @@ export async function createQdrantCollection(collectionName) {
 }
 
 export async function createEmbeddings(chunks) {
-    const extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2')
+    const extractor = await extractorPromise
     return await extractor(chunks, {
         pooling: 'mean',
         normalize: true
@@ -110,6 +111,16 @@ export async function upsertEmbeddings(chunks, embeddings, collectionName, overw
     } else {
         console.log('Collection is not empty.')
     }
+}
+
+export async function queryDatabase(query, collectionName) {
+    const embedding = await createEmbeddings(query)
+    const vector = Array.from(embedding[0])
+    return await client.query(collectionName, {
+        query: vector,
+        limit: 3,
+        with_payload: true
+    })
 }
 
 // async function stopQdrant() {
