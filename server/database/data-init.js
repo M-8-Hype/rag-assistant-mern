@@ -11,7 +11,7 @@ async function getUrlsFromSitemap(sitemapUrl) {
         const xml = await response.text()
         const result = await parseStringPromise(xml)
         const urls = result.urlset.url.map(url => url.loc[0])
-        return urls.filter(url => !/\d+\.\d+(-\w+)?/.test(url) && !url.includes('api')).slice(0,10)
+        return urls.filter(url => !/\d+\.\d+(-\w+)?/.test(url) && !url.includes('api')).slice(0,1)
     } catch (e) {
         console.error('Error fetching or parsing sitemap:', e.message)
     }
@@ -58,5 +58,5 @@ export default async function initializeData() {
         return await Promise.all(chunks.map(chunk => formatTextFromChunk(chunk)))
     })
     const formattedChunks = await Promise.all(formattedChunkPromises)
-    return formattedChunks.flat()
+    return formattedChunks.flat().slice(0, 10)
 }

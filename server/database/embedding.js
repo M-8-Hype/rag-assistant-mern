@@ -60,22 +60,23 @@ export async function startQdrant() {
         }
     } catch (e) {
         console.error(`Error managing Qdrant container: ${e.message}`)
+        process.exit(1)
     }
 }
 
-export async function createQdrantCollection(name) {
+export async function createQdrantCollection(collectionName) {
     try {
-        const exists = (await client.collectionExists(name)).exists
+        const exists = (await client.collectionExists(collectionName)).exists
         if (!exists) {
-            await client.createCollection(name, {
+            await client.createCollection(collectionName, {
                 vectors: {
                     size: 384,
                     distance: 'Cosine'
                 }
             })
-            console.log(`Collection ${name} has been created.`)
+            console.log(`Collection ${collectionName} has been created.`)
         } else {
-            console.log(`Collection ${name} already exists.`)
+            console.log(`Collection ${collectionName} already exists.`)
         }
     } catch (e) {
         console.error(`Error creating Qdrant collection: ${e.message}`)
@@ -88,6 +89,27 @@ export async function createEmbeddings(chunks) {
         pooling: 'mean',
         normalize: true
     })
+}
+
+export async function upsertEmbeddings(chunks, embeddings, collectionName, overwrite = false) {
+    const points = chunks.map((chunk, index) => ({
+        id: index,
+        vector: Array.from(embeddings[index].data),
+        payload: { text: chunk }
+    }))
+    console.log(points.length)
+    const collectionInfo = await client.getCollection(collectionName)
+    console.log(collectionInfo.points_count)
+    if (collectionInfo.points_count === 0 || overwrite) {
+        if (collectionInfo.points_count > 0) {
+            await client.delete(collectionName, { filter: {} })
+            console.log('Collection cleared.')
+        }
+        await client.upsert(collectionName, { points })
+        console.log('Embeddings upserted.')
+    } else {
+        console.log('Collection is not empty.')
+    }
 }
 
 // async function stopQdrant() {
