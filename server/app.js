@@ -3,8 +3,8 @@ import express from 'express'
 import fs from 'fs'
 import https from 'https'
 import llmAnswersRoute from './routes/llm-answers.route.js'
-import initializeData from './database/data-init.js'
-import { startQdrant, createQdrantCollection, createEmbeddings, upsertEmbeddings, queryDatabase } from "./database/embedding.js"
+import { initializeData, testFunctions } from './database/data-init.js'
+import { startQdrant, createQdrantCollection, createEmbeddings, upsertEmbeddings, queryDatabase, convertQueryToText } from "./database/embedding.js"
 
 const app = express()
 const key = fs.readFileSync('./certificates/key.pem')
@@ -27,13 +27,11 @@ async function startServer() {
     if (!dataAvailable) {
         try {
             const chunks = await initializeData()
-            console.log(chunks.length)
             const embeddings = await createEmbeddings(chunks)
-            const query = await queryDatabase('shutdown hook for the logging system', collectionName)
-            console.log(query.points[0].payload.text)
-            console.log(query.points)
-            console.log('Embeddings created.')
             await upsertEmbeddings(chunks, embeddings, collectionName, false)
+            const query = await queryDatabase('Various properties can be specified inside your application.properties file', collectionName)
+            console.log(`Text for the LLM:\n${convertQueryToText(query)}`)
+            console.log('Embeddings created.')
         } catch (e) {
             console.error(`Error creating embeddings: ${e.message}`)
         }
@@ -45,3 +43,5 @@ async function startServer() {
 }
 
 startServer()
+
+// testFunctions()

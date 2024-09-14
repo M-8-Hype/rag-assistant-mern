@@ -98,9 +98,7 @@ export async function upsertEmbeddings(chunks, embeddings, collectionName, overw
         vector: Array.from(embeddings[index].data),
         payload: { text: chunk }
     }))
-    console.log(points.length)
     const collectionInfo = await client.getCollection(collectionName)
-    console.log(collectionInfo.points_count)
     if (collectionInfo.points_count === 0 || overwrite) {
         if (collectionInfo.points_count > 0) {
             await client.delete(collectionName, { filter: {} })
@@ -121,6 +119,11 @@ export async function queryDatabase(query, collectionName) {
         limit: 3,
         with_payload: true
     })
+}
+
+export function convertQueryToText(query) {
+    const array = Array.from(query.points).map(point => point.payload.text)
+    return array.join('\n\n')
 }
 
 // async function stopQdrant() {
