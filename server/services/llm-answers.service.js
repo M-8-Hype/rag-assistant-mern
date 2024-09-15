@@ -18,17 +18,17 @@ export async function getLlmAnswer(query, callback) {
 
 async function callPerplexityApi(prompt) {
         const options = {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${llmApiKey}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            model: 'llama-3.1-sonar-small-128k-online',
-            messages: [
-                {role: 'system', content: 'You are a helpful assistant.'},
-                {role: 'user', content: prompt}
-            ]
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${llmApiKey}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'llama-3.1-sonar-small-128k-online',
+                messages: [
+                    {role: 'system', content: 'You are a helpful assistant.'},
+                    {role: 'user', content: prompt}
+                ]
         })
     }
     const response = await fetch('https://api.perplexity.ai/chat/completions', options)

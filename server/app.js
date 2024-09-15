@@ -3,8 +3,10 @@ import express from 'express'
 import fs from 'fs'
 import https from 'https'
 import llmAnswersRoute from './routes/llm-answers.route.js'
-import { initializeData, testFunctions } from './database/data-init.js'
-import { startQdrant, createQdrantCollection, createEmbeddings, upsertEmbeddings, queryDatabase, convertQueryToText } from "./database/embedding.js"
+import { initializeData, testFunctions } from './database/data.js'
+import { createEmbeddings } from "./database/embedding.js"
+import { startQdrant, createQdrantCollection, upsertEmbeddings } from './database/vector.js'
+import { queryDatabase, convertQueryToText } from './middleware/query-vector-db.js'
 
 const app = express()
 const key = fs.readFileSync('./certificates/key.pem')
@@ -28,8 +30,8 @@ async function startServer() {
         try {
             const chunks = await initializeData()
             const embeddings = await createEmbeddings(chunks)
-            await upsertEmbeddings(chunks, embeddings, collectionName, false)
-            const query = await queryDatabase('Various properties can be specified inside your application.properties file', collectionName)
+            await upsertEmbeddings(chunks, embeddings, collectionName, true)
+            const query = await queryDatabase('register shutdown hook', collectionName)
             console.log(`Text for the LLM:\n${convertQueryToText(query)}`)
             console.log('Embeddings created.')
         } catch (e) {
