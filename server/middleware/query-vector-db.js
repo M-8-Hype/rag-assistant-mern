@@ -2,7 +2,7 @@ import { createEmbeddings } from '../database/embedding.js'
 import { client } from '../database/vector.js'
 
 export async function queryVectorDatabase(req, res, next) {
-    const query = req.body.query
+    const query = req.body.prompt
     try {
         const embedding = await createEmbeddings(query)
         const vector = Array.from(embedding[0])
@@ -11,8 +11,7 @@ export async function queryVectorDatabase(req, res, next) {
             limit: 3,
             with_payload: true
         })
-        // res.locals.llmText = `Text for the LLM:\n${convertQueryToText(queryAnswer)}`
-        res.locals.llmText = 'Please tell me briefly about tanukis.'
+        res.locals.llmText = convertQueryToText(queryAnswer)
         next()
     } catch (e) {
         console.error('Error querying the database:', e.message)
