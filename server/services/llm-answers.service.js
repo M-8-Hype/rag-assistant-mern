@@ -9,7 +9,7 @@ export async function getLlmAnswer(query, callback) {
     // })
     // const prompt = promptTemplate.format({ input: 'dogs'})
     try {
-        const response = await callPerplexityApi('Please tell me briefly about dogs.')
+        const response = await callPerplexityApi(query)
         return callback(null, response)
     } catch (err) {
         return callback(err, null)

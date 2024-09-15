@@ -1,10 +1,11 @@
 import express from 'express'
 import { getLlmAnswer } from '../services/llm-answers.service.js'
+import { queryVectorDatabase } from '../middleware/query-vector-db.js'
 
 const router = express.Router()
 
-router.get('/', (req, res, next) => {
-    getLlmAnswer(req.query, (err, result) => {
+router.post('/', queryVectorDatabase, (req, res) => {
+    getLlmAnswer(res.locals.llmText, (err, result) => {
         if (result) {
             console.log(result.choices[0].message.content)
             res.status(200).json(result)
