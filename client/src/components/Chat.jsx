@@ -3,6 +3,7 @@ import { useState } from 'react'
 
 const Chat = () => {
     const [inputText, setInputText] = useState('')
+    const [outputText, setOutputText] = useState('')
 
     const handleChange = (e) => {
         const { value } = e.target
@@ -11,12 +12,18 @@ const Chat = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        fetch('http://localhost:3001/responses')
+            .then(res => res.json())
+            .then(data => {
+                setOutputText(data[0].message)
+            })
+            .catch(e => console.error(`Error: ${e}`))
     }
 
     return (
         <>
             <div className={styles.chatOutput}>
-                <p>Chat will be displayed here</p>
+                {outputText && <p>{outputText}</p>}
             </div>
             <form className={styles.chatInput} onSubmit={handleSubmit}>
                 <label htmlFor="name">Enter your text:</label>
@@ -28,7 +35,7 @@ const Chat = () => {
                     onChange={handleChange}
                     required
                 />
-                <button>
+                <button type="submit">
                     Send
                 </button>
             </form>
