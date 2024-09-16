@@ -1,5 +1,6 @@
 import styles from './Chat.module.scss'
 import { useState } from 'react'
+import ChatOutput from '../ChatOutput/ChatOutput'
 
 const Chat = () => {
     const [inputText, setInputText] = useState('')
@@ -22,9 +23,7 @@ const Chat = () => {
 
     return (
         <>
-            <div className={styles.chatOutput}>
-                {outputText && <p>{outputText}</p>}
-            </div>
+            <ChatOutput outputText={outputText} />
             <form className={styles.chatInput} onSubmit={handleSubmit}>
                 <label htmlFor="name">Enter your text:</label>
                 <input
