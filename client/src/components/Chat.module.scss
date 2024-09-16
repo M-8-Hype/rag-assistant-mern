@@ -1,0 +1,11 @@
+.chatInput {
+    flex: 0 0 auto;
+    display: flex;
+    input {
+        flex: 1 0 auto;
+    }
+}
+
+.chatOutput {
+    flex: 1 0 auto;
+}
