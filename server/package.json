@@ -16,8 +16,8 @@
     "type": "git",
     "url": "git+https://github.com/M-8-Hype/rag-assistant-mern.git"
   },
-  "author": "Alexander Suesskind",
-  "license": "ISC",
+  "author": "Alexander Suesskind <alexander.suesskind@yahoo.com>",
+  "license": "CC-BY-ND-4.0",
   "bugs": {
     "url": "https://github.com/M-8-Hype/rag-assistant-mern/issues"
   },
