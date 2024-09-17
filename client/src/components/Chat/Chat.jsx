@@ -4,7 +4,7 @@ import ChatOutput from '../ChatOutput/ChatOutput'
 
 const Chat = () => {
     const [inputText, setInputText] = useState('')
-    const [outputText, setOutputText] = useState('')
+    const [query, setQuery] = useState(null)
 
     const handleChange = (e) => {
         const { value } = e.target
@@ -16,14 +16,18 @@ const Chat = () => {
         fetch('http://localhost:3001/responses')
             .then(res => res.json())
             .then(data => {
-                setOutputText(data[0].message)
+                const newOutputText = data[0].message
+                setQuery({
+                    inputText: inputText,
+                    outputText: newOutputText
+                })
             })
             .catch(e => console.error(`Error: ${e}`))
     }
 
     return (
         <>
-            <ChatOutput outputText={outputText} />
+            <ChatOutput query={query} />
             <form className={styles.chatInput} onSubmit={handleSubmit}>
                 <label htmlFor="name">Enter your text:</label>
                 <input
