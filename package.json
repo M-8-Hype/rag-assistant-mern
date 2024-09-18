@@ -1,0 +1,20 @@
+{
+  "name": "rag-assistant-mern",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev"
+  },
+  "author": "Alexander Suesskind <alexander.suesskind@yahoo.com>",
+  "license": "CC-BY-ND-4.0",
+  "bugs": {
+    "url": "https://github.com/M-8-Hype/rag-assistant-mern/issues"
+  },
+  "homepage": "https://github.com/M-8-Hype/rag-assistant-mern#readme",
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}

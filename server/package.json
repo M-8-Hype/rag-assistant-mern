@@ -20,10 +20,6 @@
   },
   "author": "Alexander Suesskind <alexander.suesskind@yahoo.com>",
   "license": "CC-BY-ND-4.0",
-  "bugs": {
-    "url": "https://github.com/M-8-Hype/rag-assistant-mern/issues"
-  },
-  "homepage": "https://github.com/M-8-Hype/rag-assistant-mern#readme",
   "dependencies": {
     "@langchain/community": "^0.2.32",
     "@qdrant/js-client-rest": "^1.11.0",
