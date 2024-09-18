@@ -34,7 +34,35 @@ To enable HTTPS for your local development environment, you'll need to generate 
 
    This command creates a certificate (cert.pem) that is valid for 365 days.
 
-### 2. Starting Qdrant
+### 2. Environment Configuration
+
+This project uses environment variables to manage configuration settings for both the client and server components. Environment variables are stored in `.env` files, which are not included in the repository for security reasons. Instead, we provide `.env.example` files that specify the required variables.
+
+#### Setting Up Environment Variables
+
+To set up your environment variables, follow these steps for both the client and server:
+
+1. **Locate the `.env.example` files**
+   - Navigate to the `client` and `server` directories to find the `.env.example` files.
+
+2. **Copy and rename**
+   - For each component, copy the `.env.example` file and rename it to `.env`.
+
+   ```bash
+   # For the client
+   cd client
+   cp .env.example .env
+
+   # For the server
+   cd server
+   cp .env.example .env
+   ```
+
+3. **Fill in the required variables**
+
+   - Open each `.env` file and fill in the necessary values for each variable. The `.env.example` files provide a template with placeholders that indicate what information needs to be provided.
+
+### 3. Starting Qdrant
 
 To start Qdrant, ensure that Docker Desktop and/or the Docker daemon are running. The application uses Docker to manage the Qdrant container. By default, Qdrant uses the following ports:
 
@@ -63,5 +91,9 @@ When terminating the Node server, the Docker container running Qdrant needs to b
 ```bash
 docker stop qdrant
 ```
+
+### 4. Handling CORS Issues
+
+The application uses the `cors` middleware to handle Cross-Origin Resource Sharing (CORS) issues. By default, the application allows requests from `localhost` on port `5173`. If you are running the client on a different port or domain, you can specify it in the corresponding `.env` file or may need to generally adjust the CORS settings in the `app.js` file. To learn more about CORS and how to handle these issues, refer to [MDN's CORS reference](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
 
 This ensures that all resources are released properly and the container does not continue running in the background.
