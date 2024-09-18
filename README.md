@@ -17,7 +17,7 @@ To enable HTTPS for your local development environment, you'll need to generate 
    ```
 
 2. **Create a Certificate Signing Request (CSR)**
-   
+
    Run the following command to create a CSR:
    ```bash
    openssl req -new -key key.pem -out csr.pem
@@ -43,10 +43,10 @@ This project uses environment variables to manage configuration settings for bot
 To set up your environment variables, follow these steps for both the client and server:
 
 1. **Locate the `.env.example` files**
-   - Navigate to the `client` and `server` directories to find the `.env.example` files.
+    - Navigate to the `client` and `server` directories to find the `.env.example` files.
 
 2. **Copy and rename**
-   - For each component, copy the `.env.example` file and rename it to `.env`.
+    - For each component, copy the `.env.example` file and rename it to `.env`.
 
    ```bash
    # For the client
@@ -60,7 +60,7 @@ To set up your environment variables, follow these steps for both the client and
 
 3. **Fill in the required variables**
 
-   - Open each `.env` file and fill in the necessary values for each variable. The `.env.example` files provide a template with placeholders that indicate what information needs to be provided.
+    - Open each `.env` file and fill in the necessary values for each variable. The `.env.example` files provide a template with placeholders that indicate what information needs to be provided.
 
 ### 3. Starting Qdrant
 
@@ -97,3 +97,62 @@ docker stop qdrant
 The application uses the `cors` middleware to handle Cross-Origin Resource Sharing (CORS) issues. By default, the application allows requests from `localhost` on port `5173`. If you are running the client on a different port or domain, you can specify it in the corresponding `.env` file or may need to generally adjust the CORS settings in the `app.js` file. To learn more about CORS and how to handle these issues, refer to [MDN's CORS reference](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
 
 This ensures that all resources are released properly and the container does not continue running in the background.
+
+## Running the Application
+
+This project includes scripts to start both the client and server components of the MERN stack application. You can run each component individually or both concurrently in development mode.
+
+### Available Scripts
+
+- **`npm start`**: This script starts both the client and server concurrently in development mode, enabling features such as hot-reloading for easier development and debugging.
+- **`npm run client`**: Starts only the client application in development mode.
+- **`npm run server`**: Starts only the server application in development mode.
+
+### How to Use
+
+1. **Ensure dependencies are installed**:
+
+   Before running the application, make sure that all dependencies are installed for both the client and server. Run the following commands from the root directory in order:
+
+   ```bash
+   # Install dependencies for both client and server
+   npm install
+   cd client && npm install
+   cd ../server && npm install
+    ```
+
+2. **Run both client and server concurrently**:
+
+   To start both the client and server concurrently, run the following command from the root directory:
+
+   ```bash
+   # Start both client and server concurrently
+   npm start
+   ```
+
+   This command will concurrently start both parts of the application, allowing you to make changes without needing to restart the servers manually.
+
+
+3. **Run client or server individually**:
+
+   To start only either part of the application in development mode, you can use:
+
+   ```bash
+   # Start only the client
+   npm run client
+   
+   # Start only the server
+   npm run server
+   ```
+
+   Alternatively, run either part by navigating to the `client` or `server` directory:
+
+   ```bash
+   # Start only the client
+   cd client
+   npm run dev
+   
+   # Start only the server
+   cd server
+   npm run dev
+   ```
