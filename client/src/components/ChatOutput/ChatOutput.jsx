@@ -1,5 +1,6 @@
 import styles from './ChatOutput.module.scss'
 import { useState, useEffect } from 'react'
+import Markdown from 'markdown-to-jsx'
 
 const ChatOutput = ({ query }) => {
     const [chatHistory, setChatHistory] = useState([])
@@ -14,8 +15,10 @@ const ChatOutput = ({ query }) => {
 
     const chatDisplay = chatHistory.map(chatQuery => (
         <div key={chatQuery.id} className={styles.chatOutput}>
-            <p>Question: {chatQuery.inputText}</p>
-            <p>Answer: {chatQuery.outputText}</p>
+            <p>Question:</p>
+            <p>{chatQuery.inputText}</p>
+            <p>Answer:</p>
+            <Markdown>{chatQuery.outputText}</Markdown>
         </div>
         )
 

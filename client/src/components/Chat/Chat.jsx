@@ -23,10 +23,10 @@ const Chat = () => {
         try {
             const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/llm-answers`, options)
             const data = await res.json()
-            const newOutputText = data.choices[0].message.content
+            const responseText = data.choices[0].message.content
             setQuery({
                 inputText: inputText,
-                outputText: newOutputText
+                outputText: responseText
             })
         } catch (e) {
             console.error(`Error: ${e}`)
