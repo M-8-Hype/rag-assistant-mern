@@ -1,4 +1,5 @@
 import 'dotenv/config'
+import cors from 'cors'
 import express from 'express'
 import fs from 'fs'
 import https from 'https'
@@ -14,6 +15,12 @@ const cert = fs.readFileSync('./certificates/cert.pem')
 const server = https.createServer({ key: key, cert: cert }, app)
 const HTTPS_PORT = process.env.HTTPS_PORT || 443
 
+const corsOptions = {
+    origin: process.env.CLIENT_URL,
+    optionsSuccessStatus: 200,
+    exposedHeaders: ['Authorization']
+}
+app.use(cors(corsOptions))
 app.use(express.json())
 app.get('/', (req, res) => {
     res.send('Hello World!')

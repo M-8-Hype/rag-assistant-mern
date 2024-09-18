@@ -11,18 +11,26 @@ const Chat = () => {
         setInputText(() => value)
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        fetch('http://localhost:3001/responses')
-            .then(res => res.json())
-            .then(data => {
-                const newOutputText = data[0].message
-                setQuery({
-                    inputText: inputText,
-                    outputText: newOutputText
-                })
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ prompt: inputText })
+        }
+        try {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/llm-answers`, options)
+            const data = await res.json()
+            const newOutputText = data.choices[0].message.content
+            setQuery({
+                inputText: inputText,
+                outputText: newOutputText
             })
-            .catch(e => console.error(`Error: ${e}`))
+        } catch (e) {
+            console.error(`Error: ${e}`)
+        }
     }
 
     return (
