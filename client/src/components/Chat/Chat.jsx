@@ -5,6 +5,7 @@ import ChatOutput from '../ChatOutput/ChatOutput'
 const Chat = () => {
     const [inputText, setInputText] = useState('')
     const [query, setQuery] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
 
     const handleChange = (e) => {
         const { value } = e.target
@@ -13,6 +14,7 @@ const Chat = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setIsLoading(true)
         const options = {
             method: 'POST',
             headers: {
@@ -24,6 +26,7 @@ const Chat = () => {
             const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/llm-answers`, options)
             const data = await res.json()
             const responseText = data.choices[0].message.content
+            setIsLoading(false)
             setQuery({
                 inputText: inputText,
                 outputText: responseText
@@ -35,7 +38,7 @@ const Chat = () => {
 
     return (
         <>
-            <ChatOutput query={query} />
+            <ChatOutput inputText={inputText} query={query} isLoading={isLoading} />
             <form className={styles.chatInput} onSubmit={handleSubmit}>
                 <label htmlFor="name">Enter your text:</label>
                 <input

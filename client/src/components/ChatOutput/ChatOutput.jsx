@@ -1,8 +1,9 @@
 import styles from './ChatOutput.module.scss'
 import { useState, useEffect } from 'react'
 import Markdown from 'markdown-to-jsx'
+import LoadingAnswer from '../LoadingAnswer/LoadingAnswer.jsx'
 
-const ChatOutput = ({ query }) => {
+const ChatOutput = ({ inputText, query, isLoading }) => {
     const [chatHistory, setChatHistory] = useState([])
 
     useEffect(() => {
@@ -13,20 +14,24 @@ const ChatOutput = ({ query }) => {
         }
     }, [query])
 
-    const chatDisplay = chatHistory.map(chatQuery => (
-        <div key={chatQuery.id} className={styles.chatOutput}>
-            <h3>Question</h3>
-            <p>{chatQuery.inputText}</p>
-            <h3>Answer</h3>
-            <Markdown>{chatQuery.outputText}</Markdown>
+    const chatHistoryDisplay = chatHistory.map(chatQuery => (
+        <div key={chatQuery.id} className={styles.chatQuery}>
+            <div className={styles.question}>
+                <h3>Question</h3>
+                <p>{chatQuery.inputText}</p>
+            </div>
+            <div className={styles.answer}>
+                <h3>Answer</h3>
+                <Markdown>{chatQuery.outputText}</Markdown>
+            </div>
         </div>
         )
-
     )
 
     return (
-        <div className={styles.chatDisplay}>
-            {chatDisplay}
+        <div className={styles.chatOutput}>
+            {chatHistoryDisplay}
+            {isLoading && <LoadingAnswer inputText={inputText} />}
         </div>
     )
 }
