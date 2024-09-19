@@ -15,9 +15,9 @@ const ChatOutput = ({ query }) => {
 
     const chatDisplay = chatHistory.map(chatQuery => (
         <div key={chatQuery.id} className={styles.chatOutput}>
-            <p>Question:</p>
+            <h3>Question</h3>
             <p>{chatQuery.inputText}</p>
-            <p>Answer:</p>
+            <h3>Answer</h3>
             <Markdown>{chatQuery.outputText}</Markdown>
         </div>
         )

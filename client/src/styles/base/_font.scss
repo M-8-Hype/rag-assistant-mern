@@ -1,0 +1,17 @@
+@use "../abstracts/variables";
+
+:root {
+    font-family: variables.$font-play, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+code, kbd, pre, samp {
+    font-family: Menlo, Consolas, Roboto Mono, Ubuntu Monospace, Noto Mono, Oxygen Mono, Liberation Mono, monospace;
+}
+
+h1 {
+    font-family: variables.$font-press-start-2p, sans-serif;
+}
+
+h3 {
+    font-family: variables.$font-press-start-2p, sans-serif;
+}

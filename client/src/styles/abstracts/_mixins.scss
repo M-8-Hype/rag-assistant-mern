@@ -1,0 +1,11 @@
+@mixin text-gradient($font-size, $first-color, $second-color, $third-color) {
+    display: inline-block;
+    font: {
+        weight: 400;
+        size: $font-size;
+    }
+    padding: 12px;
+    background: linear-gradient(90deg, $first-color 0%, $second-color 50%, $third-color 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
