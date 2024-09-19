@@ -38,7 +38,11 @@ const Chat = () => {
 
     return (
         <>
-            <ChatOutput inputText={inputText} query={query} isLoading={isLoading} />
+            <ChatOutput
+                inputText={inputText}
+                query={query}
+                isLoading={isLoading}
+            />
             <form className={styles.chatInput} onSubmit={handleSubmit}>
                 <label htmlFor="name">Enter your text:</label>
                 <input
