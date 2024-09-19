@@ -1,0 +1,25 @@
+.question,
+.answer,
+.loading {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    p {
+        margin-top: 0;
+        text-align: start;
+    }
+}
+
+.question {
+    align-items: flex-start;
+    margin-right: auto;
+}
+
+.answer,
+.loading {
+    align-items: flex-end;
+    margin-left: auto;
+    & > *:last-child {
+        text-align: left;
+    }
+}

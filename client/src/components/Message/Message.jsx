@@ -1,33 +1,24 @@
-import styles from '../ChatOutput/ChatOutput.module.scss'
+import styles from './Message.module.scss'
 import Markdown from 'markdown-to-jsx'
 import { ScaleLoader } from 'react-spinners'
+import PropTypes from 'prop-types'
+import { MESSAGE_TYPE } from '../../utils/constants.js'
 
 const Message = ({ text, type }) => {
-    let message
-    if (type === 'question') {
-        message = (
-            <div className={styles.question}>
-                <h3>Question</h3>
-                <p>{text}</p>
-            </div>
-        )
-    } else if (type === 'answer') {
-        message = (
-            <div className={styles.answer}>
-                <h3>Answer</h3>
-                <Markdown>{text}</Markdown>
-            </div>
-        )
-    } else {
-        message = (
-            <div className={styles.answer}>
-                <h3>Answer</h3>
+    return (
+        <div className={styles[type]}>
+            <h3>{type.charAt(0).toUpperCase() + type.slice(1)}</h3>
+            {type === MESSAGE_TYPE[2] ? (
                 <ScaleLoader color={"#FFFFFF"} height={30} width={10} margin={5} radius={5} />
-            </div>
-        )
-    }
+            ) : (
+                <Markdown>{text}</Markdown>
+            )}
+        </div>
+    )
+}
 
-    return message
+Message.propTypes = {
+    type: PropTypes.oneOf(MESSAGE_TYPE).isRequired
 }
 
 export default Message
