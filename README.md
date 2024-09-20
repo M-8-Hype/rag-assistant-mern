@@ -1,4 +1,9 @@
-## Prerequisites
+## Status
+
+🚧 **Work in Progress** 🚧  
+This project is currently under development. Features and functionality may change as work progresses. Contributions and feedback are welcome, but please note that the project is not yet complete.
+
+## Installation
 
 Before you can run the project locally, ensure you have met the following prerequisites:
 
@@ -98,7 +103,7 @@ The application uses the `cors` middleware to handle Cross-Origin Resource Shari
 
 This ensures that all resources are released properly and the container does not continue running in the background.
 
-## Running the Application
+## Usage
 
 This project includes scripts to start both the client and server components of the MERN stack application. You can run each component individually or both concurrently in development mode.
 
