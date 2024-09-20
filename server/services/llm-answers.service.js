@@ -3,7 +3,8 @@ const llmApiKey = process.env.LLM_API_KEY
 export async function getLlmAnswer(prompt, query, callback) {
     try {
         const response = await callPerplexityApi(prompt, query)
-        return callback(null, response)
+        const answer = response.choices[0].message.content
+        return callback(null, answer)
     } catch (err) {
         return callback(err, null)
     }

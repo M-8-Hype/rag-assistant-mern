@@ -6,7 +6,7 @@
   "type": "module",
   "nodemonConfig": {
     "ignore": [
-      "qdrant_storage/*"
+      "storage/*"
     ]
   },
   "scripts": {

@@ -24,8 +24,7 @@ const Chat = () => {
         }
         try {
             const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/llm-answers`, options)
-            const data = await res.json()
-            const responseText = data.choices[0].message.content
+            const responseText = await res.json()
             setIsLoading(false)
             setQuery({
                 inputText: inputText,
