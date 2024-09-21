@@ -4,10 +4,10 @@ import express from 'express'
 import fs from 'fs'
 import https from 'https'
 import llmAnswersRoute from './routes/llm-answers.route.js'
-import { initializeData, testFunctions } from './database/data.js'
+import { initializeData } from './database/data.js'
 import { createEmbeddings } from "./database/embedding.js"
 import { startQdrant, createQdrantCollection, upsertEmbeddings } from './database/vector.js'
-import { queryVectorDatabase, convertQueryToText } from './middleware/query-vector-db.js'
+import { initDB, startMongoDb } from './database/mongo.js'
 
 const app = express()
 const key = fs.readFileSync('./certificates/key.pem')
@@ -38,13 +38,13 @@ async function startServer() {
             const chunks = await initializeData()
             const embeddings = await createEmbeddings(chunks)
             await upsertEmbeddings(chunks, embeddings, collectionName, false)
-            // const query = await queryDatabase('register shutdown hook', collectionName)
-            // console.log(`Text for the LLM:\n${convertQueryToText(query)}`)
-            // console.log('Embeddings created.')
         } catch (e) {
             console.error(`Error creating embeddings: ${e.message}`)
         }
     }
+
+    await startMongoDb()
+    await initDB()
 
     server.listen(HTTPS_PORT, () => {
         console.log(`App listening on port ${HTTPS_PORT}.`)
@@ -52,5 +52,3 @@ async function startServer() {
 }
 
 startServer()
-
-// testFunctions()

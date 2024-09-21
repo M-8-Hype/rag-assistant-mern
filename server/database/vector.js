@@ -12,10 +12,10 @@ export async function startQdrant() {
             'qdrant',
             'qdrant/qdrant',
             'v1.11.3',
+            '/storage/qdrant',
+            '/qdrant/storage',
             QDRANT_HTTP_PORT,
             QDRANT_GRPC_PORT,
-            '/storage/qdrant',
-            '/qdrant/storage'
         )
     } catch (e) {
         console.error(`Error managing Qdrant container: ${e.message}`)

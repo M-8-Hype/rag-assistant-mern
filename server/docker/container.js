@@ -1,6 +1,6 @@
 import docker from './client.js'
 
-export default async function startContainer(containerName, imageName, imageTag, httpPort, grpcPort = null, hostDirectory, containerDirectory) {
+export default async function startContainer(containerName, imageName, imageTag, hostDirectory, containerDirectory, httpPort, grpcPort = null) {
     try {
         const containers = await docker.listContainers({all: true})
         const foundContainer = containers.find(container => container.Names.includes(`/${containerName}`))
@@ -13,7 +13,7 @@ export default async function startContainer(containerName, imageName, imageTag,
             console.log(`${containerName} has been started.`)
         } else {
             await pullImage(imageName, imageTag)
-            const container = await createContainer(containerName, imageName, imageTag, httpPort, grpcPort, hostDirectory, containerDirectory)
+            const container = await createContainer(containerName, imageName, imageTag, hostDirectory, containerDirectory, httpPort, grpcPort)
             await container.start()
             console.log(`${containerName} container has been created and started.`)
         }
@@ -23,7 +23,7 @@ export default async function startContainer(containerName, imageName, imageTag,
     }
 }
 
-async function createContainer(containerName, imageName, imageTag, httpPort, grpcPort, hostDirectory, containerDirectory) {
+async function createContainer(containerName, imageName, imageTag, hostDirectory, containerDirectory, httpPort, grpcPort) {
     const exposedPorts = {
         [`${httpPort}/tcp`]: {}
     }

@@ -1,9 +1,12 @@
+import LlmAnswers from '../models/llm-answers.model.js'
+
 const llmApiKey = process.env.LLM_API_KEY
 
 export async function getLlmAnswer(prompt, query, callback) {
     try {
         const response = await callPerplexityApi(prompt, query)
         const answer = response.choices[0].message.content
+        await saveLlmAnswer(prompt, answer, 'TestUser')
         return callback(null, answer)
     } catch (err) {
         return callback(err, null)
@@ -43,4 +46,19 @@ async function callPerplexityApi(prompt, query) {
         throw new Error(`Error: ${response.statusText}`)
     }
     return await response.json()
+}
+
+async function saveLlmAnswer(prompt, answer, user) {
+    try {
+        const newAnswer = {
+            prompt: prompt,
+            answer: answer,
+            userID: user,
+        }
+        await LlmAnswers.create(newAnswer)
+        console.log('Answer saved successfully')
+    } catch (e) {
+        console.error('Error saving answer:', e)
+        throw e
+    }
 }

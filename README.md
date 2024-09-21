@@ -67,18 +67,26 @@ To set up your environment variables, follow these steps for both the client and
 
     - Open each `.env` file and fill in the necessary values for each variable. The `.env.example` files provide a template with placeholders that indicate what information needs to be provided.
 
-### 3. Starting Qdrant
+### 3. Starting Database Services
 
-To start Qdrant, ensure that Docker Desktop and/or the Docker daemon are running. The application uses Docker to manage the Qdrant container. By default, Qdrant uses the following ports:
+This application uses a vector database (Qdrant) for similarity search operations and a NoSQL database (MongoDB) for general data persistence. To start both services, ensure that Docker Desktop and/or the Docker daemon are running, since they are both running in Docker containers. By default, they use the following ports:
 
+**Qdrant**:
 - **HTTP Port**: 6333
 - **gRPC Port**: 6334
+
+**MongoDB**:
+- **HTTP Port**: 27017
 
 These ports can be adjusted by modifying the corresponding entries in the `.env` file:
 
 ```plaintext
+# For Qdrant
 QDRANT_HTTP_PORT=your_custom_http_port
 QDRANT_GRPC_PORT=your_custom_grpc_port
+
+# For MongoDB
+MONGO_HTTP_PORT=your_custom_http_port
 ```
 
 Make sure to restart the application after making any changes to the `.env` file to apply the new port settings.
@@ -89,12 +97,12 @@ Make sure to restart the application after making any changes to the `.env` file
 - **MacOS**: Docker Desktop should be installed and running. Use the Terminal to execute Docker commands.
 - **Linux**: Ensure the Docker daemon is running. You may need to use `sudo` for Docker commands depending on your user permissions.
 
-#### Stopping the Docker Container
+#### Stopping Docker Containers
 
-When terminating the Node server, the Docker container running Qdrant needs to be stopped manually. You can do this by pressing the corresponding button in Docker Desktop or by running the following command in your terminal:
+When terminating the Node server, the Docker container running the database services needs to be stopped manually. You can do this by pressing the corresponding button in Docker Desktop respectively or by running the following command in your terminal:
 
 ```bash
-docker stop qdrant
+docker stop qdrant mongodb
 ```
 
 ### 4. Handling CORS Issues
