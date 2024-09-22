@@ -3,6 +3,7 @@ import cors from 'cors'
 import express from 'express'
 import fs from 'fs'
 import https from 'https'
+import chatHistoryRoute from './routes/chat-history.route.js'
 import llmAnswersRoute from './routes/llm-answers.route.js'
 import { initializeData } from './database/data.js'
 import { createEmbeddings } from "./database/embedding.js"
@@ -26,6 +27,7 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 app.use('/api/llm-answers', llmAnswersRoute)
+app.use('/api/chat-history', chatHistoryRoute)
 
 async function startServer() {
     await startQdrant()

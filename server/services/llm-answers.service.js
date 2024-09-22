@@ -1,4 +1,4 @@
-import LlmAnswers from '../models/llm-answers.model.js'
+import ChatHistoryModel from '../models/chat-history.model.js'
 
 const llmApiKey = process.env.LLM_API_KEY
 
@@ -55,7 +55,7 @@ async function saveLlmAnswer(prompt, answer, user) {
             answer: answer,
             userID: user,
         }
-        await LlmAnswers.create(newAnswer)
+        await ChatHistoryModel.create(newAnswer)
         console.log('Answer saved successfully')
     } catch (e) {
         console.error('Error saving answer:', e)
