@@ -11,16 +11,17 @@ const Chat = () => {
     const [chatHistory, setChatHistory] = useState([])
 
     useEffect(() => {
-        async function fetchData() {
+        async function fetchData(filters = {}) {
+            const queryParams = new URLSearchParams(filters).toString()
             try {
-                const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/chat-history`)
+                const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/chat-history${queryParams ? `?${queryParams}` : ''}`)
                 const responseText = await res.json()
                 setChatHistory(responseText)
             } catch (e) {
                 console.error(`Error: ${e}`)
             }
         }
-        fetchData()
+        fetchData({ userID: 'TestUser' })
     }, []);
 
     const handleChange = (e) => {

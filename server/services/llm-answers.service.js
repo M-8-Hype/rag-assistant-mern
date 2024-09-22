@@ -6,7 +6,7 @@ export async function getLlmAnswer(prompt, query, callback) {
     try {
         const response = await callPerplexityApi(prompt, query)
         const answer = response.choices[0].message.content
-        await saveLlmAnswer(prompt, answer, 'TestUser')
+        await saveLlmAnswer(prompt, answer, 'Einstein')
         return callback(null, answer)
     } catch (err) {
         return callback(err, null)
