@@ -25,8 +25,9 @@ const ChatOutput = ({ inputText, query, isLoading }) => {
 
     return (
         <div className={styles.chatOutput}>
+            <h2>Current Conversation</h2>
             {chatHistoryDisplay}
-            {isLoading && <LoadingAnswer inputText={inputText} />}
+            {isLoading && <LoadingAnswer inputText={inputText}/>}
         </div>
     )
 }
