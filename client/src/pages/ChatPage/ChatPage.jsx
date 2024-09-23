@@ -1,9 +1,9 @@
-import styles from './Chat.module.scss'
+import styles from './ChatPage.module.scss'
 import { useEffect, useState } from 'react'
-import ChatOutput from '../ChatOutput/ChatOutput'
-import ChatHistory from '../ChatHistory/ChatHistory.jsx'
+import ChatOutput from '../../components/ChatOutput/ChatOutput.jsx'
+import ChatHistory from '../../components/ChatHistory/ChatHistory.jsx'
 
-const Chat = () => {
+const ChatPage = () => {
     const [inputText, setInputText] = useState('')
     const [query, setQuery] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
@@ -21,7 +21,7 @@ const Chat = () => {
                 console.error(`Error: ${e}`)
             }
         }
-        fetchData({ userID: 'TestUser' })
+        fetchData({ userID: 'Einstein' })
     }, []);
 
     const handleChange = (e) => {
@@ -57,7 +57,7 @@ const Chat = () => {
     }
 
     return (
-        <>
+        <div className={styles.chatPage}>
             {showHistory && <ChatHistory chatHistory={chatHistory} />}
             <button onClick={handleShowHistory}>Click</button>
             <ChatOutput
@@ -79,8 +79,8 @@ const Chat = () => {
                     Send
                 </button>
             </form>
-        </>
+        </div>
     )
 }
 
-export default Chat
+export default ChatPage
