@@ -2,6 +2,7 @@ import styles from './ChatPage.module.scss'
 import { useEffect, useState } from 'react'
 import ChatOutput from '../../components/ChatOutput/ChatOutput.jsx'
 import ChatHistory from '../../components/ChatHistory/ChatHistory.jsx'
+import { Link } from 'react-router-dom'
 
 const ChatPage = () => {
     const [inputText, setInputText] = useState('')
@@ -58,6 +59,9 @@ const ChatPage = () => {
 
     return (
         <div className={styles.chatPage}>
+            <Link to="/instructions">
+                <button>Previous Page</button>
+            </Link>
             {showHistory && <ChatHistory chatHistory={chatHistory} />}
             <button onClick={handleShowHistory}>Click</button>
             <ChatOutput

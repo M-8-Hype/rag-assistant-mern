@@ -5,17 +5,17 @@ import Message from '../Message/Message.jsx'
 import { MESSAGE_TYPE } from '../../utils/constants.js'
 
 const ChatOutput = ({ inputText, query, isLoading }) => {
-    const [chatHistory, setChatHistory] = useState([])
+    const [chatOutput, setChatOutput] = useState([])
 
     useEffect(() => {
         if (query) {
             console.log(query)
-            const newObject = Object.assign({}, { id: chatHistory.length }, query)
-            setChatHistory(prevArray => [...prevArray, newObject])
+            const newObject = Object.assign({}, { id: chatOutput.length }, query)
+            setChatOutput(prevArray => [...prevArray, newObject])
         }
     }, [query])
 
-    const chatHistoryDisplay = chatHistory.map(chatQuery => (
+    const chatOutputDisplay = chatOutput.map(chatQuery => (
         <div key={chatQuery.id} className={styles.chatQuery}>
             <Message text={chatQuery.inputText} type={MESSAGE_TYPE[0]} />
             <Message text={chatQuery.outputText} type={MESSAGE_TYPE[1]} />
@@ -26,7 +26,7 @@ const ChatOutput = ({ inputText, query, isLoading }) => {
     return (
         <div className={styles.chatOutput}>
             <h2>Current Conversation</h2>
-            {chatHistoryDisplay}
+            {chatOutputDisplay}
             {isLoading && <LoadingAnswer inputText={inputText}/>}
         </div>
     )
