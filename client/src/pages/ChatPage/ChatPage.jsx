@@ -59,7 +59,7 @@ const ChatPage = () => {
 
     return (
         <div className={styles.chatPage}>
-            <Link to="/instructions">
+            <Link to="/settings">
                 <button>Previous Page</button>
             </Link>
             {showHistory && <ChatHistory chatHistory={chatHistory} />}

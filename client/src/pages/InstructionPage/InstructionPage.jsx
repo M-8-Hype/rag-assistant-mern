@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 const InstructionPage = () => {
     return (
         <div>
-            <Link to="/chat">
+            <Link to="/settings">
                 <button>Next Page</button>
             </Link>
             <h2>Instructions</h2>
