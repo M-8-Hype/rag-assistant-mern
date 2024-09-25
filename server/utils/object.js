@@ -7,3 +7,8 @@ export function filterObjects(objects, necessaryKeys) {
         return sanitizedObject
     })
 }
+
+export function replaceKey(object, oldKey, newKey, newValue) {
+    const { [oldKey]: _, ...objectWithoutOldValue } = object
+    return Object.assign(objectWithoutOldValue, { [newKey]: newValue })
+}

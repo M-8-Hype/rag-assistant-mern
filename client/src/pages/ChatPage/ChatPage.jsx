@@ -22,7 +22,7 @@ const ChatPage = () => {
                 console.error(`Error: ${e}`)
             }
         }
-        fetchData({ userID: 'Einstein' })
+        fetchData({ nickname: 'AlbertoFTW' })  // Replace hardcoded nickname with user's nickname
     }, []);
 
     const handleChange = (e) => {

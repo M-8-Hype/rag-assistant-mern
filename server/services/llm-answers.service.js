@@ -3,11 +3,11 @@ import UserModel from '../models/user.model.js'
 
 const llmApiKey = process.env.LLM_API_KEY
 
-export async function getLlmAnswer(prompt, query, callback) {
+export async function getLlmAnswer(userNickname, prompt, query, callback) {
     try {
         const response = await callPerplexityApi(prompt, query)
         const answer = response.choices[0].message.content
-        await saveLlmAnswer(prompt, answer, 'Einstein')
+        await saveLlmAnswer(prompt, answer, userNickname)
         return callback(null, answer)
     } catch (err) {
         return callback(err, null)
