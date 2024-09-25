@@ -1,42 +1,16 @@
 import { Link } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useContext } from 'react'
 import Setting from '../../components/Setting/Setting.jsx'
+import SessionContext from '../../state/Context.jsx'
 
 const SettingPage = () => {
-    const [formData, setFormData] = useState({
-        user: '',
-        language: '',
-        database: ''
-    })
-
-    useEffect(() => {
-        setFormData({
-            user: validateArray(users),
-            language: validateArray(languages),
-            database: validateArray(databases)
-        })
-    }, [])
-
-    const users = [
-        { label: 'User 1', value: 'user1' },
-        { label: 'User 2', value: 'user2' },
-        { label: 'User 3', value: 'user3' }
-    ]
-
-    const languages = [
-        { label: 'English', value: 'en' },
-        { label: 'German', value: 'de' }
-    ]
-
-    const databases = [
-        { label: 'Database 1', value: 'db1' },
-        { label: 'Database 2', value: 'db2' }
-    ]
+    const { settings, setSettings } = useContext(SessionContext)
+    const { options } = useContext(SessionContext)
 
     const handleChange = (e) => {
         const { name, value } = e.target
-        setFormData(prevFormData => {
-            return { ...prevFormData,
+        setSettings(prevSettings => {
+            return { ...prevSettings,
                 [name]: value
             }
         })
@@ -44,11 +18,6 @@ const SettingPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(formData)
-    }
-
-    function validateArray(array) {
-        return array.length > 0 ? array[0].value : ''
     }
 
     return (
@@ -63,20 +32,20 @@ const SettingPage = () => {
             <form onSubmit={handleSubmit}>
                 <Setting
                     name="user"
-                    value={formData.user}
-                    options={users}
+                    value={settings.user}
+                    options={options.users}
                     handleChange={handleChange}
                 />
                 <Setting
                     name="language"
-                    value={formData.language}
-                    options={languages}
+                    value={settings.language}
+                    options={options.languages}
                     handleChange={handleChange}
                 />
                 <Setting
                     name="database"
-                    value={formData.database}
-                    options={databases}
+                    value={settings.database}
+                    options={options.databases}
                     handleChange={handleChange}
                 />
                 <button type="submit">
