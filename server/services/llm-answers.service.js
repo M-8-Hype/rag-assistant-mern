@@ -1,4 +1,5 @@
 import ChatHistoryModel from '../models/chat-history.model.js'
+import UserModel from '../models/user.model.js'
 
 const llmApiKey = process.env.LLM_API_KEY
 
@@ -48,12 +49,13 @@ async function callPerplexityApi(prompt, query) {
     return await response.json()
 }
 
-async function saveLlmAnswer(prompt, answer, user) {
+async function saveLlmAnswer(prompt, answer, userNickname) {
+    const user = await UserModel.findOne({ nickname: userNickname })
     try {
         const newAnswer = {
             prompt: prompt,
             answer: answer,
-            userID: user,
+            userID: user._id,
         }
         await ChatHistoryModel.create(newAnswer)
         console.log('Answer saved successfully')
