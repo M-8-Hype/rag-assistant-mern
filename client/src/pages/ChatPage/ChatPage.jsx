@@ -11,6 +11,8 @@ const ChatPage = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [showHistory, setShowHistory] = useState(false)
     const [chatHistory, setChatHistory] = useState([])
+    const [showSelection, setShowSelection] = useState(false)
+    const [selectedQueries, setSelectedQueries] = useState([])
     const { settings } = useContext(SessionContext)
 
     useEffect(() => {
@@ -58,8 +60,15 @@ const ChatPage = () => {
         }
     }
 
-    const handleShowHistory = async () => {
+    const handleShowHistory = () => {
         setShowHistory(prevState => !prevState)
+    }
+
+    const handleShowSelection = () => {
+        setShowSelection(prevState => !prevState)
+        const selection = chatHistory.filter(chatQuery => selectedQueries.includes(chatQuery._id))
+        const selectedText = selection.map(chatQuery => chatQuery.inputText).join('\n')
+        console.log(selectedText)
     }
 
     return (
@@ -67,8 +76,16 @@ const ChatPage = () => {
             <Link to="/settings">
                 <button>Previous Page</button>
             </Link>
-            {showHistory && <ChatHistory chatHistory={chatHistory} />}
-            <button onClick={handleShowHistory}>Click</button>
+            {showHistory && <ChatHistory
+                chatHistory={chatHistory}
+                showSelection={showSelection}
+                selectedQueries={selectedQueries}
+                setSelectedQueries={setSelectedQueries}
+            />}
+            <div>
+                <button onClick={handleShowHistory}>{showHistory ? 'Close' : 'Expand'}</button>
+                {showHistory && <button onClick={handleShowSelection}>{showSelection ? 'Save Selection' : 'Select'}</button>}
+            </div>
             <ChatOutput
                 inputText={inputText}
                 query={query}
