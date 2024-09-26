@@ -1,8 +1,9 @@
 import styles from './ChatPage.module.scss'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import ChatOutput from '../../components/ChatOutput/ChatOutput.jsx'
 import ChatHistory from '../../components/ChatHistory/ChatHistory.jsx'
 import { Link } from 'react-router-dom'
+import SessionContext from '../../state/Context.jsx'
 
 const ChatPage = () => {
     const [inputText, setInputText] = useState('')
@@ -10,6 +11,7 @@ const ChatPage = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [showHistory, setShowHistory] = useState(false)
     const [chatHistory, setChatHistory] = useState([])
+    const { settings } = useContext(SessionContext)
 
     useEffect(() => {
         async function fetchData(filters = {}) {
@@ -22,7 +24,7 @@ const ChatPage = () => {
                 console.error(`Error: ${e}`)
             }
         }
-        fetchData({ nickname: 'AlbertoFTW' })  // Replace hardcoded nickname with user's nickname
+        fetchData({ nickname: settings.user })
     }, []);
 
     const handleChange = (e) => {
@@ -38,7 +40,10 @@ const ChatPage = () => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ prompt: inputText })
+            body: JSON.stringify({
+                prompt: inputText,
+                userNickname: settings.user
+            })
         }
         try {
             const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/llm-answers`, options)

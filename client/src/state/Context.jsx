@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from 'react'
+import { DROPDOWN_OPTIONS } from '../utils/constants.js'
 
 const SessionContext = createContext(null)
 
@@ -10,14 +11,8 @@ export const SessionProvider = ({ children }) => {
     })
     const [options, setOptions] = useState({
         users: [],
-        languages: [
-            { label: 'English', value: 'en' },
-            { label: 'German', value: 'de' }
-        ],
-        databases: [
-            { label: 'Database 1', value: 'db1' },
-            { label: 'Database 2', value: 'db2' }
-        ]
+        languages: DROPDOWN_OPTIONS.languages,
+        databases: DROPDOWN_OPTIONS.databases
     })
 
     useEffect(() => {
