@@ -37,6 +37,10 @@ const ChatPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         setIsLoading(true)
+        const selection = chatHistory.filter(chatQuery => selectedQueries.includes(chatQuery._id))
+        const selectedOutputText = selection.map((chatQuery, index) => {
+            return `Query: #${index}\nQuestion: ${chatQuery.inputText}\nAnswer: ${chatQuery.outputText}`
+        }).join('\n\n')
         const options = {
             method: 'POST',
             headers: {
@@ -44,7 +48,10 @@ const ChatPage = () => {
             },
             body: JSON.stringify({
                 prompt: inputText,
-                userNickname: settings.user
+                userNickname: settings.user,
+                language: settings.language,
+                database: settings.database,
+                selectedHistory: selectedOutputText
             })
         }
         try {
@@ -66,9 +73,6 @@ const ChatPage = () => {
 
     const handleShowSelection = () => {
         setShowSelection(prevState => !prevState)
-        const selection = chatHistory.filter(chatQuery => selectedQueries.includes(chatQuery._id))
-        const selectedText = selection.map(chatQuery => chatQuery.inputText).join('\n')
-        console.log(selectedText)
     }
 
     return (

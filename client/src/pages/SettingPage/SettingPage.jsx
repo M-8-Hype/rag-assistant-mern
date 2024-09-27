@@ -48,9 +48,6 @@ const SettingPage = () => {
                     options={options.databases}
                     handleChange={handleChange}
                 />
-                <button type="submit">
-                    Save
-                </button>
             </form>
         </div>
     )

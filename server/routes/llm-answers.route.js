@@ -5,7 +5,7 @@ import { queryVectorDatabase } from '../middleware/query-vector-db.js'
 const router = express.Router()
 
 router.post('/', queryVectorDatabase, (req, res) => {
-    getLlmAnswer(req.body.userNickname, req.body.prompt, res.locals.llmText, (err, result) => {
+    getLlmAnswer(req.body, res.locals.llmText, (err, result) => {
         if (result) {
             console.log(result)
             res.status(200).json(result)
