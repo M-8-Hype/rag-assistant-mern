@@ -72,7 +72,7 @@ const SettingPage = () => {
     }
 
     return (
-        <>
+        <div>
             <div className={showModal ? stylesModal.blurBackground : ''}>
                 <Link to="/instructions">
                     <button>Previous Page</button>
@@ -150,7 +150,7 @@ const SettingPage = () => {
                     </button>
                 </form>
             </Modal>}
-        </>
+        </div>
     )
 }
 

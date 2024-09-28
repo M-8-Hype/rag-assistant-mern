@@ -7,6 +7,7 @@ import SettingPage from './pages/SettingPage/SettingPage.jsx'
 import { SessionProvider } from './state/Context.jsx'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import ReportPage from './pages/ReportPage/ReportPage.jsx'
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                     <Route path="/instructions" element={<InstructionPage />} />
                     <Route path="/settings" element={<SettingPage />} />
                     <Route path="/chat" element={<ChatPage />} />
+                    <Route path="/report" element={<ReportPage />} />
                 </Routes>
             </SessionProvider>
             <ToastContainer

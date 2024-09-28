@@ -4,6 +4,7 @@ import ChatOutput from '../../components/ChatOutput/ChatOutput.jsx'
 import ChatHistory from '../../components/ChatHistory/ChatHistory.jsx'
 import { Link } from 'react-router-dom'
 import SessionContext from '../../state/Context.jsx'
+import { fetchChatHistory } from '../../utils/fetch.js'
 
 const ChatPage = () => {
     const [inputText, setInputText] = useState('')
@@ -16,18 +17,8 @@ const ChatPage = () => {
     const { settings } = useContext(SessionContext)
 
     useEffect(() => {
-        async function fetchData(filters = {}) {
-            const queryParams = new URLSearchParams(filters).toString()
-            try {
-                const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/chat-history${queryParams ? `?${queryParams}` : ''}`)
-                const responseText = await res.json()
-                setChatHistory(responseText)
-            } catch (e) {
-                console.error(`Error: ${e}`)
-            }
-        }
-        fetchData({ nickname: settings.user })
-    }, []);
+        fetchChatHistory({ nickname: settings.user }, setChatHistory)
+    }, [])
 
     const handleChange = (e) => {
         const { value } = e.target
@@ -79,6 +70,9 @@ const ChatPage = () => {
         <div className={styles.chatPage}>
             <Link to="/settings">
                 <button>Previous Page</button>
+            </Link>
+            <Link to="/report">
+                <button>Next Page</button>
             </Link>
             {showHistory && <ChatHistory
                 chatHistory={chatHistory}
