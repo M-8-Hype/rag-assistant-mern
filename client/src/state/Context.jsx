@@ -46,11 +46,11 @@ export const SessionProvider = ({ children }) => {
     }, [options])
 
     function validateArray(array) {
-        return array.length > 0 ? array[0].value : ''
+        return array.length > 0 ? array[array.length - 1].value : ''
     }
 
     return (
-        <SessionContext.Provider value={{ settings, setSettings, options }}>
+        <SessionContext.Provider value={{ settings, setSettings, options, setOptions }}>
             {children}
         </SessionContext.Provider>
     )

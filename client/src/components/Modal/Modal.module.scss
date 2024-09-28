@@ -1,0 +1,46 @@
+.modal {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    min-width: 250px;
+    max-width: 400px;
+    height: fit-content;
+    background: navy;
+    border-radius: 0.75rem;
+    transition: all 0.5s ease;
+    z-index: 1;
+    color: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 16px;
+    border: 1px solid darkgreen;
+    & > button {
+        background-color: navy;
+        border: 1px solid royalblue;
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        padding: 0;
+        height: 30px;
+        width: 40px;
+        min-width: 30px;
+        &:hover {
+            border-color: darkgreen;
+        }
+    }
+    & > div {
+        width: 100%;
+    }
+    h2 {
+        margin-top: 0;
+    }
+}
+
+.blurBackground {
+    filter: blur(2px);
+    pointer-events: none;
+}
+
