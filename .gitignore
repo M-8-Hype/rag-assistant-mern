@@ -250,5 +250,6 @@ fabric.properties
 /server/certificates
 /.idea/codeStyles/codeStyleConfig.xml
 /server/storage/*
+/server/output/*
 
 # Client (TBD)
