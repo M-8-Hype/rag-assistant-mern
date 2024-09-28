@@ -5,6 +5,7 @@ import SessionContext from '../../state/Context.jsx'
 import Modal from '../../components/Modal/Modal.jsx'
 import stylesModal from '../../components/Modal/Modal.module.scss'
 import styles from './SettingPage.module.scss'
+import { toast } from 'react-toastify'
 
 const SettingPage = () => {
     const { settings, setSettings, options, setOptions } = useContext(SessionContext)
@@ -48,12 +49,16 @@ const SettingPage = () => {
             const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/users`, options)
             if (res.ok) {
                 setShowModal(false)
+                toast.success('User created successfully!')
                 const newUser = { label: formData.nickname, value: formData.nickname }
                 setOptions(prevOptions => {
                     return { ...prevOptions, users: [...prevOptions.users, newUser] }
                 })
+            } else {
+                toast.error('Error creating user. Please try again.')
             }
         } catch (e) {
+            toast.error('Error creating user. Please try again.')
             console.error(`Error: ${e}`)
         }
     }
