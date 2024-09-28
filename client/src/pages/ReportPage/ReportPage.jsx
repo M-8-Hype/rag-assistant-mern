@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { fetchChatHistory } from '../../utils/fetch.js'
 import { useContext } from 'react'
 import SessionContext from '../../state/Context.jsx'
+import { saveAs } from 'file-saver'
 
 const ReportPage = () => {
     const { settings } = useContext(SessionContext)
@@ -12,6 +13,8 @@ const ReportPage = () => {
             return `Query: #${index}\nQuestion: ${chatQuery.inputText}\nAnswer: ${chatQuery.outputText}`
         }).join('\n----------\n')
         console.log(text)
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
+        saveAs(blob, 'chat-history.txt')
     }
 
     return (

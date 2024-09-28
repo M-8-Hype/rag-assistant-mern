@@ -18,6 +18,7 @@ export async function getChatHistory(reqQuery, callback) {
             const { _id, prompt: inputText, answer: outputText } = chat
             return { _id, inputText, outputText }
         })
+        console.log(sanitizedChatHistory)
         return callback(null, sanitizedChatHistory)
     } catch (err) {
         return callback(err, null)
