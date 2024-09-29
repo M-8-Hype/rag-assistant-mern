@@ -1,10 +1,13 @@
 import styles from './ChatPage.module.scss'
+import stylesModal from '../../components/Modal/Modal.module.scss'
 import { useContext, useEffect, useState } from 'react'
 import ChatOutput from '../../components/ChatOutput/ChatOutput.jsx'
 import ChatHistory from '../../components/ChatHistory/ChatHistory.jsx'
 import { Link } from 'react-router-dom'
 import SessionContext from '../../state/Context.jsx'
 import { fetchChatHistory } from '../../utils/fetch.js'
+import Modal from '../../components/Modal/Modal.jsx'
+import { getChatInstructionsAsJsx } from '../../utils/texts.jsx'
 
 const ChatPage = () => {
     const [inputText, setInputText] = useState('')
@@ -14,6 +17,7 @@ const ChatPage = () => {
     const [chatHistory, setChatHistory] = useState([])
     const [showSelection, setShowSelection] = useState(false)
     const [selectedQueries, setSelectedQueries] = useState([])
+    const [showInstruction, setShowInstruction] = useState(false)
     const { settings } = useContext(SessionContext)
 
     useEffect(() => {
@@ -66,43 +70,55 @@ const ChatPage = () => {
         setShowSelection(prevState => !prevState)
     }
 
+    const handleShowInstruction = () => {
+        setShowInstruction(prevState => !prevState)
+    }
+
     return (
         <div className={styles.chatPage}>
-            <Link to="/settings">
-                <button>Previous Page</button>
-            </Link>
-            <Link to="/report">
-                <button>Next Page</button>
-            </Link>
-            {showHistory && <ChatHistory
-                chatHistory={chatHistory}
-                showSelection={showSelection}
-                selectedQueries={selectedQueries}
-                setSelectedQueries={setSelectedQueries}
-            />}
-            <div>
-                <button onClick={handleShowHistory}>{showHistory ? 'Close' : 'Expand'}</button>
-                {showHistory && <button onClick={handleShowSelection}>{showSelection ? 'Save Selection' : 'Select'}</button>}
-            </div>
-            <ChatOutput
-                inputText={inputText}
-                query={query}
-                isLoading={isLoading}
-            />
-            <form className={styles.chatInput} onSubmit={handleSubmit}>
-                <label htmlFor="name">Enter your text:</label>
-                <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    value={inputText}
-                    onChange={handleChange}
-                    required
+            <div className={showInstruction ? stylesModal.blurBackground : ''}>
+                <Link to="/settings">
+                    <button>Previous Page</button>
+                </Link>
+                <Link to="/report">
+                    <button>Next Page</button>
+                </Link>
+                {showHistory && <ChatHistory
+                    chatHistory={chatHistory}
+                    showSelection={showSelection}
+                    selectedQueries={selectedQueries}
+                    setSelectedQueries={setSelectedQueries}
+                />}
+                <div>
+                    <button onClick={handleShowHistory}>{showHistory ? 'Close' : 'Expand'}</button>
+                    {showHistory && <button onClick={handleShowSelection}>{showSelection ? 'Save Selection' : 'Select'}</button>}
+                </div>
+                <ChatOutput
+                    inputText={inputText}
+                    query={query}
+                    isLoading={isLoading}
                 />
-                <button type="submit">
-                    Send
+                <form className={styles.chatInput} onSubmit={handleSubmit}>
+                    <label htmlFor="name">Enter your text:</label>
+                    <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        value={inputText}
+                        onChange={handleChange}
+                        required
+                    />
+                    <button type="submit">
+                        Send
+                    </button>
+                </form>
+                <button onClick={handleShowInstruction}>
+                    Show Instruction
                 </button>
-            </form>
+            </div>
+            {showInstruction && <Modal setShowModal={setShowInstruction}>
+                {getChatInstructionsAsJsx()}
+            </Modal>}
         </div>
     )
 }
