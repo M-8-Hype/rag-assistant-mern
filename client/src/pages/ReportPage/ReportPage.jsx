@@ -9,15 +9,11 @@ const ReportPage = () => {
     const { settings } = useContext(SessionContext)
 
     const handleSaveChat = async () => {
-        const chatHistory = await fetchChatHistory({
+        const textChatHistory = await fetchChatHistory({
             nickname: settings.user,
             writeToFile: true
         })
-        const text = chatHistory.map((chatQuery, index) => {
-            return `Query: #${index}\nQuestion: ${chatQuery.inputText}\nAnswer: ${chatQuery.outputText}`
-        }).join('\n----------\n')
-        console.log(text)
-        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
+        const blob = new Blob([textChatHistory], { type: 'text/plain;charset=utf-8' })
         const lowerCaseNickname = settings.user.replaceAll(' ', '').toLowerCase()
         try {
             saveAs(blob, `chat-history-${lowerCaseNickname}.txt`)
