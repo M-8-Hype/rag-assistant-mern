@@ -18,11 +18,11 @@ export const INSTRUCTION = {
             text: "You are now at the core of the application (Chat). Here you can ask questions about the game you have selected. You can ask questions in both English and German. The system will answer your questions in the language you have selected in the settings. For this trial, the procedure is largely predetermined. Therefore, please follow the instructions and do not deviate from them, as much as possible.",
             subItems: [
                 {
-                    name: "chat-tbd-1",
-                    text: "TBD 1"
+                    name: "chat-1",
+                    text: "To get an understanding of how the system works, please ask the following question: 'How can you help me?'"
                 },
                 {
-                    name: "chat-tbd-2",
+                    name: "chat-2",
                     text: "TBD 2"
                 }
             ],

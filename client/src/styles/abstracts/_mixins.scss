@@ -9,3 +9,11 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+@mixin text-shadow($offset, $blur, $color) {
+    text-shadow:
+        $offset $offset $blur $color,
+        (-$offset) $offset $blur $color,
+        (-$offset) (-$offset) $blur $color,
+        $offset (-$offset) $blur $color;
+}
