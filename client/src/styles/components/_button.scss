@@ -1,7 +1,7 @@
 @use "../themes/dark";
 
 button {
-    border-radius: 8px;
+    border-radius: 0.4rem;
     border: 1px solid dark.$auxiliary-secondary-color;
     padding: 0.6em 1.2em;
     font-size: 1em;
@@ -18,5 +18,13 @@ button {
     &:focus,
     &:focus-visible {
         outline: 4px auto -webkit-focus-ring-color;
+    }
+}
+
+.button-box {
+    display: flex;
+    justify-content: center;
+    button {
+        margin: 0 8px;
     }
 }

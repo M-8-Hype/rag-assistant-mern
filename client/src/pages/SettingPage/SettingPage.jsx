@@ -74,23 +74,26 @@ const SettingPage = () => {
     return (
         <div>
             <div className={showModal ? stylesModal.blurBackground : ''}>
-                <Link to="/instructions">
-                    <button>Previous Page</button>
-                </Link>
-                <Link to="/chat">
-                    <button>Next Page</button>
-                </Link>
+                <div className="button-box">
+                    <Link to="/instructions">
+                        <button>Previous Page</button>
+                    </Link>
+                    <Link to="/chat">
+                        <button>Next Page</button>
+                    </Link>
+                </div>
                 <h2>Settings</h2>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className={styles.form}>
                     <Setting
                         name="user"
                         value={settings.user}
                         options={options.users}
                         handleChange={handleSettingsChange}
-                    />
-                    <button type="button" onClick={handleCreateUser}>
-                        Create User
-                    </button>
+                    >
+                        <button type="button" onClick={handleCreateUser}>
+                            Create User
+                        </button>
+                    </Setting>
                     <Setting
                         name="language"
                         value={settings.language}

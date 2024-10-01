@@ -1,0 +1,11 @@
+@use "../themes/dark";
+
+form {
+    select {
+        padding: 4px;
+        border-radius: 0.4rem;
+        option {
+            background-color: dark.$background-primary-color;
+        }
+    }
+}

@@ -1,0 +1,30 @@
+.setting {
+    min-height: 48px;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    & > div {
+        width: 300px;
+        display: inherit;
+        justify-content: space-between;
+        align-items: center;
+    }
+    button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: calc(100% + 16px);
+        width: fit-content;
+        white-space: nowrap;
+    }
+}
+
+label {
+    width: 120px;
+    text-align: left;
+    margin: {
+        right: 16px;
+    }
+}

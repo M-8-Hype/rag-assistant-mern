@@ -8,10 +8,7 @@ code, kbd, pre, samp {
     font-family: Menlo, Consolas, Roboto Mono, Ubuntu Monospace, Noto Mono, Oxygen Mono, Liberation Mono, monospace;
 }
 
-h1 {
-    font-family: variables.$font-press-start-2p, sans-serif;
-}
-
-h3 {
+h1,
+h2 {
     font-family: variables.$font-press-start-2p, sans-serif;
 }

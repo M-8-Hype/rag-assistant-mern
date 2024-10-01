@@ -77,12 +77,15 @@ const ChatPage = () => {
     return (
         <div className={styles.chatPage}>
             <div className={showInstruction ? stylesModal.blurBackground : ''}>
-                <Link to="/settings">
-                    <button>Previous Page</button>
-                </Link>
-                <Link to="/report">
-                    <button>Next Page</button>
-                </Link>
+                <div className="button-box">
+                    <Link to="/settings">
+                        <button>Previous Page</button>
+                    </Link>
+                    <Link to="/report">
+                        <button>Next Page</button>
+                    </Link>
+                </div>
+                <h2>Chat</h2>
                 {showHistory && <ChatHistory
                     chatHistory={chatHistory}
                     showSelection={showSelection}

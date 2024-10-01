@@ -25,7 +25,7 @@ const ChatHistory = ({ chatHistory, showSelection, selectedQueries, setSelectedQ
 
     return (
         <div id="chatHistory">
-            <h2>Chat History</h2>
+            <h3>Chat History</h3>
             {chatHistoryDisplay}
         </div>
     )
