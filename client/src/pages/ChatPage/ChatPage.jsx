@@ -102,12 +102,13 @@ const ChatPage = () => {
                     isLoading={isLoading}
                 />
                 <form className={styles.chatInput} onSubmit={handleSubmit}>
-                    <label htmlFor="name">Enter your text:</label>
+                    <label htmlFor="name">Please enter your question here</label>
                     <input
                         type="text"
                         name="name"
                         id="name"
                         value={inputText}
+                        placeholder="Please enter your question here..."
                         onChange={handleChange}
                         required
                     />

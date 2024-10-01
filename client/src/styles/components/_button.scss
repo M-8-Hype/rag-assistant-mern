@@ -11,6 +11,7 @@ button {
     background-color: rgba($color: dark.$auxiliary-primary-color, $alpha: 0.2);
     cursor: pointer;
     transition: border-color 0.25s;
+    min-height: 48px;
     &:hover {
         color: dark.$accent-primary-color;
         border-color: dark.$accent-primary-color;
