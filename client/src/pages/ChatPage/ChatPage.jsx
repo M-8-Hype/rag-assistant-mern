@@ -92,9 +92,9 @@ const ChatPage = () => {
                     selectedQueries={selectedQueries}
                     setSelectedQueries={setSelectedQueries}
                 />}
-                <div>
-                    <button onClick={handleShowHistory}>{showHistory ? 'Close' : 'Expand'}</button>
-                    {showHistory && <button onClick={handleShowSelection}>{showSelection ? 'Save Selection' : 'Select'}</button>}
+                <div className="button-box">
+                    <button onClick={handleShowHistory}>{showHistory ? 'Close History' : 'Show History'}</button>
+                    {showHistory && <button onClick={handleShowSelection}>{showSelection ? 'Save Selection' : 'Select Messages'}</button>}
                 </div>
                 <ChatOutput
                     inputText={inputText}
@@ -117,10 +117,11 @@ const ChatPage = () => {
                     </button>
                 </form>
                 <button onClick={handleShowInstruction}>
-                    Show Instruction
+                    Show Chat Instructions
                 </button>
             </div>
             {showInstruction && <Modal setShowModal={setShowInstruction}>
+                <h3>Chat Instructions</h3>
                 {getChatInstructionsAsJsx()}
             </Modal>}
         </div>

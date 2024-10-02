@@ -1,3 +1,5 @@
+@use "../../styles/themes/dark";
+
 .question,
 .answer,
 .loading {
@@ -7,6 +9,12 @@
     p {
         margin-top: 0;
         text-align: start;
+    }
+    span,
+    p {
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
 }
 
@@ -21,5 +29,18 @@
     margin-left: auto;
     & > *:last-child {
         text-align: left;
+    }
+}
+
+h3 {
+    [class*="question"] &,
+    [class*="answer"] & {
+        text-decoration: underline;
+        text-underline-offset: 8px;
+        text-decoration-color: dark.$accent-primary-color;
+        margin-bottom: 12px;
+    }
+    [class*="question"] & {
+        margin-top: 0;
     }
 }
