@@ -1,0 +1,9 @@
+.instructionPage {
+    a {
+        &:last-child {
+            button {
+                margin-bottom: 16px;
+            }
+        }
+    }
+}

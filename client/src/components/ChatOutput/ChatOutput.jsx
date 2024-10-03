@@ -26,7 +26,7 @@ const ChatOutput = ({ inputText, query, isLoading }) => {
     return (
         <div className={styles.chatOutput} id="chatOutput">
             <h3>Active Conversation</h3>
-            {chatOutput.length === 0 ? "There are no active messages." : {chatOutputDisplay}}
+            {chatOutput.length === 0 ? "There are no active messages." : chatOutputDisplay}
             {isLoading && <LoadingAnswer inputText={inputText}/>}
         </div>
     )

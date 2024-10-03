@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom'
 import { INSTRUCTION, getInstructionStepsAsJsx } from '../../utils/texts.jsx'
+import styles from './InstructionPage.module.scss'
 
 const InstructionPage = () => {
     return (
-        <div>
+        <div className={styles.instructionPage}>
             <Link to="/settings">
                 <button>Next Page</button>
             </Link>

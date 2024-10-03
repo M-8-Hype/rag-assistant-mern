@@ -24,7 +24,7 @@ export const INSTRUCTION = {
                 {
                     name: "chat-2",
                     text: "TBD 2"
-                }
+                },
             ],
             conclusion: "Once you have completed each step, click on the corresponding button to go to the next page."
         },
@@ -64,7 +64,7 @@ export const getChatInstructionsAsJsx = () => {
     const chatInstructions = INSTRUCTION.steps.find(step => step.name === "chat")
     if (chatInstructions) {
         return (
-            <div>
+            <div id="chatInstructions">
                 <p>{chatInstructions.text}</p>
                 {chatInstructions.subItems && <ol>
                     {chatInstructions.subItems.map((subItem, subIndex) => {

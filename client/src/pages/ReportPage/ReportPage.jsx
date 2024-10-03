@@ -4,6 +4,7 @@ import { useContext } from 'react'
 import SessionContext from '../../state/Context.jsx'
 import { saveAs } from 'file-saver'
 import { toast } from 'react-toastify'
+import styles from './ReportPage.module.scss'
 
 const ReportPage = () => {
     const { settings } = useContext(SessionContext)
@@ -25,7 +26,7 @@ const ReportPage = () => {
     }
 
     return (
-        <div>
+        <div className={styles.reportPage}>
             <Link to="/chat">
                 <button>Previous Page</button>
             </Link>

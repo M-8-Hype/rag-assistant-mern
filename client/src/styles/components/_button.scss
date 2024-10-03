@@ -20,6 +20,14 @@ button {
     &:focus-visible {
         outline: 4px auto -webkit-focus-ring-color;
     }
+    [class*="chatInput"] & {
+        color: dark.$background-primary-color;
+        background-color: dark.$accent-primary-color;
+        &:hover {
+            background-color: darken(dark.$accent-primary-color, 15%);
+            color: dark.$auxiliary-secondary-color;
+        }
+    }
 }
 
 .button-box {
