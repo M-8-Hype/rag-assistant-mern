@@ -11,7 +11,7 @@ const Setting = ({ name, value, options, handleChange, children }) => {
         <div className={styles.setting}>
             <div>
                 <label htmlFor={name}>
-                    {`${name.charAt(0).toUpperCase()}${name.slice(1)}:`}
+                    {`${name.charAt(0).toUpperCase()}${name.slice(1)}`}
                 </label>
                 <select name={name} value={value} onChange={handleChange}>
                     {dropdown}

@@ -1,6 +1,16 @@
 .createUser {
     display: flex;
     flex-direction: column;
+    & > label {
+        align-self: flex-start;
+    }
+    input {
+        padding: 4px 8px;
+        margin-bottom: 8px;
+    }
+    div[class*="setting"] {
+        margin-bottom: 8px;
+    }
 }
 
 .form {

@@ -109,7 +109,7 @@ const SettingPage = () => {
                 </form>
             </div>
             {showModal && <Modal setShowModal={setShowModal}>
-                <h2>Create User</h2>
+                <h3>Create User</h3>
                 <form onSubmit={handleSubmit} className={styles.createUser}>
                     <label htmlFor="nickname">Nickname</label>
                     <input
