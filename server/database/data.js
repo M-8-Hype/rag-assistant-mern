@@ -1,9 +1,9 @@
 import fetch from 'node-fetch'
 import { parseStringPromise } from 'xml2js'
-// import { CheerioWebBaseLoader } from "@langchain/community/document_loaders/web/cheerio"
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter"
 import { Document } from '@langchain/core/documents'
 import { load } from 'cheerio'
+import logger from '../config/logger.js'
 
 const sitemapUrl = 'https://docs.spring.io/spring-boot/sitemap.xml'
 
@@ -13,7 +13,9 @@ async function getUrlsFromSitemap(sitemapUrl) {
         const xml = await response.text()
         const result = await parseStringPromise(xml)
         const urls = result.urlset.url.map(url => url.loc[0])
-        return urls.filter(url => !/\d+\.\d+(-\w+)?/.test(url) && !url.includes('api')).slice(0,1)
+        const filteredUrls = urls.filter(url => !/\d+\.\d+(-\w+)?/.test(url) && !url.includes('api'))
+        logger.info(`URLs [#]: ${filteredUrls.length}`)
+        return filteredUrls
     } catch (e) {
         console.error('Error fetching or parsing sitemap:', e.message)
     }
@@ -25,7 +27,9 @@ async function scrapeTextFromUrl(url) {
         const html = await response.text()
         const $ = load(html)
         const paragraphs = $('p').map((i, el) => $(el).text().trim()).get()
-        return paragraphs.join('\n')
+        const textString = paragraphs.join('\n')
+        logger.info(`String length: ${textString.length}`)
+        return textString
     } catch (e) {
         console.error('Error scraping text from URL:', e.message)
     }
@@ -37,12 +41,14 @@ async function chunkText(text, url) {
             chunkSize: 1000,
             chunkOverlap: 200
         })
-        return await splitter.splitDocuments([
+        const splitDocument = await splitter.splitDocuments([
             new Document({
                 pageContent: text,
                 metadata: { source: url }
             })
         ])
+        logger.info(`Chunks [#]: ${splitDocument.length}`)
+        return splitDocument
     } catch (e) {
         console.error('Error splitting text:', e.message)
     }
@@ -70,7 +76,7 @@ export async function testFunctions() {
     const urls = await getUrlsFromSitemap(sitemapUrl)
     const scrapedText = await scrapeTextFromUrl(urls[0])
     const chunks = await chunkText(scrapedText, urls[0])
-    console.log(chunks[0].pageContent)
-    const formattedChunk = await formatTextFromChunk(chunks[0])
-    console.log(formattedChunk)
+    // console.log(chunks[0].pageContent)
+    // const formattedChunk = await formatTextFromChunk(chunks[0])
+    // console.log(formattedChunk)
 }
