@@ -6,6 +6,7 @@ import https from 'https'
 import chatHistoryRoute from './routes/chat-history.route.js'
 import llmAnswersRoute from './routes/llm-answers.route.js'
 import userRoute from './routes/user.route.js'
+import databaseRoute from './routes/database.route.js'
 import { initializeData, testFunctions } from './database/data.js'
 import { startQdrant, createQdrantCollection, upsertEmbeddingsInBatches } from './database/vector.js'
 import { initDB, startMongoDb } from './database/mongo.js'
@@ -29,13 +30,14 @@ app.get('/', (req, res) => {
 app.use('/api/llm-answers', llmAnswersRoute)
 app.use('/api/chat-history', chatHistoryRoute)
 app.use('/api/users', userRoute)
+app.use('/api/databases', databaseRoute)
 
 async function startServer() {
     await startQdrant()
     const collectionName = 'myCollectionShort-new'
     await createQdrantCollection(collectionName)
 
-    const dataAvailable = false
+    const dataAvailable = true
     if (!dataAvailable) {
         try {
             const chunks = await initializeData()
