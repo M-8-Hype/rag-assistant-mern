@@ -23,14 +23,14 @@ const customLevels = {
 }
 addColors(customLevels.colors)
 const customFormat = printf(({ level, message, label, timestamp }) => {
-    return `--- [${timestamp}] ${label} [${level.toUpperCase()}] ---\n${message}`;
+    return `--- [${timestamp}]${label ? ` ${label} ` : '---'}[${level.toUpperCase()}] ---\n${message}`;
 })
 
 const logger = createLogger({
-    level: 'debug',
+    level: 'single',
     levels: customLevels.levels,
     format: combine(
-        label({ label: 'TESTING' }),
+        // label({ label: 'TESTING' }),
         timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         customFormat
     ),
