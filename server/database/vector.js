@@ -44,46 +44,55 @@ export async function createQdrantCollection(collectionName) {
     }
 }
 
-export async function upsertEmbeddings(chunks, embeddings, collectionName, overwrite = false) {
+export async function upsertEmbeddings(chunks, embeddings, collectionName, overwrite, isFirstBatch, idOffset) {
+    logger.single(`First batch: ${isFirstBatch}`)
     try {
         logger.debug("Test 1")
-        const startTime = Date.now()
         logger.debug("Test 2")
-        // const points = chunks.map((chunk, index) => ({
-        //     id: index,
-        //     vector: Array.from(embeddings[index].data),
-        //     payload: { text: chunk }
-        // }))
         logger.debug("Test 3")
         const collectionInfo = await client.getCollection(collectionName)
         logger.debug(collectionInfo.points_count)
         logger.debug("Test 4")
-        // if (collectionInfo.points_count === 0 || overwrite) {
-        //     if (collectionInfo.points_count > 0) {
-        //         await client.delete(collectionName, { filter: {} })
-        //         logger.info('Collection cleared.')
-        //     }
-        //     // await client.upsert(collectionName, { points })
-        //     // logger.info('Embeddings upserted.')
-        // } else {
-        //     logger.info('Collection is not empty.')
-        // }
+        if (collectionInfo.points_count === 0 || overwrite) {
+            if (collectionInfo.points_count > 0 && isFirstBatch) {
+                await client.delete(collectionName, { filter: {} })
+                logger.info('Collection cleared.')
+            }
+            const points = chunks.map((chunk, index) => ({
+                id: index + idOffset,
+                vector: Array.from(embeddings[index].data),
+                payload: { text: chunk }
+            }))
+            await client.upsert(collectionName, { points })
+            logger.info('Embeddings upserted.')
+        } else {
+            logger.info('Collection is not empty.')
+        }
         logger.debug("Test 5")
-        const endTime = Date.now()
-        logger.info(`Execution time [vector.js/upsertEmbeddings]: ${((endTime - startTime) / 1000).toFixed(1)}s`)
     } catch (e) {
         logger.error(`Error upserting embeddings: ${e.message}`)
     }
 }
 
-export async function upsertEmbeddingsInBatches(chunks, collectionName, batchSize = 50, overwrite = false) {
+export async function upsertEmbeddingsInBatches(chunks, collectionName, batchSize = 30, overwrite = false) {
     try {
-        for (let i = 0; i < chunks.length; i += batchSize) {
+        const startTime = Date.now()
+        let isFirstBatch = true
+        let idOffset = 0
+        let chunkLength = chunks.length
+        for (let i = 0; i < chunkLength; i += batchSize) {
             const chunkBatch = chunks.slice(i, i + batchSize)
-            const emdeddingsBatch = await createEmbeddings(chunkBatch, batchSize)
-            await upsertEmbeddings(chunkBatch, emdeddingsBatch, collectionName, overwrite)
-            logger.process(`Upserted embeddings [${i + 1}-${i + batchSize}/${chunks.length}]`)
+            const embeddingsBatch = await createEmbeddings(chunkBatch, batchSize)
+            await upsertEmbeddings(chunkBatch, embeddingsBatch, collectionName, overwrite, isFirstBatch, idOffset)
+            const idStart = idOffset
+            const idEnd = idOffset + batchSize
+            const idRange = idEnd > chunkLength ? chunkLength : idEnd
+            isFirstBatch = false
+            idOffset += batchSize
+            logger.process(`Upserted embeddings [${idStart + 1}-${idRange}/${chunkLength}]`)
         }
+        const endTime = Date.now()
+        logger.info(`Execution time [vector.js/upsertEmbeddingsInBatches]: ${((endTime - startTime) / 1000).toFixed(1)}s`)
     } catch (e) {
         logger.error(`Error upserting embeddings in batches: ${e.message}`)
     }

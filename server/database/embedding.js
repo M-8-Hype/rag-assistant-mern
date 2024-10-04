@@ -3,7 +3,7 @@ import logger from '../config/logger.js'
 
 const extractorPromise = pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2')
 
-export async function createEmbeddings(chunks, batchSize = 50) {
+export async function createEmbeddings(chunks, batchSize) {
     const startTime = Date.now()
     const extractor = await extractorPromise
     const allEmbeddings = []
@@ -16,9 +16,9 @@ export async function createEmbeddings(chunks, batchSize = 50) {
         allEmbeddings.push(...embeddingsBatch)
     }
     const endTime = Date.now()
-    logger.info(`Execution time [embedding.js/createEmbeddings]: ${((endTime - startTime) / 1000).toFixed(1)}s`)
-    // logger.debug(`Embeddings object: ${JSON.stringify(embeddings)}`)
+    // logger.single(`Embeddings object: ${JSON.stringify(allEmbeddings)}`)
     logger.debug(`Embeddings length: ${allEmbeddings.length}`)
-    // logger.debug(`Embeddings object: ${JSON.stringify(allEmbeddings[0])}`)
-    return null
+    // logger.single(`Embeddings object: ${JSON.stringify(allEmbeddings[0])}`)
+    logger.info(`Execution time [embedding.js/createEmbeddings]: ${((endTime - startTime) / 1000).toFixed(1)}s`)
+    return allEmbeddings
 }

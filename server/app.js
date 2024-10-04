@@ -43,7 +43,7 @@ async function startServer() {
             // const embeddings = await createEmbeddings(chunks)
             // const embeddings = null
             // await upsertEmbeddings(chunks, embeddings, collectionName, true)
-            await upsertEmbeddingsInBatches(chunks, collectionName, 35, true)
+            await upsertEmbeddingsInBatches(chunks, collectionName, 30, true)
         } catch (e) {
             console.error(`Error creating embeddings: ${e.message}`)
         }
