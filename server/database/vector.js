@@ -44,19 +44,13 @@ export async function createQdrantCollection(collectionName) {
     }
 }
 
-export async function upsertEmbeddings(chunks, embeddings, collectionName, overwrite, isFirstBatch, idOffset) {
-    logger.single(`First batch: ${isFirstBatch}`)
+async function upsertEmbeddings(chunks, embeddings, collectionName, overwrite, isFirstBatch, idOffset) {
     try {
-        logger.debug("Test 1")
-        logger.debug("Test 2")
-        logger.debug("Test 3")
         const collectionInfo = await client.getCollection(collectionName)
-        logger.debug(collectionInfo.points_count)
-        logger.debug("Test 4")
         if (collectionInfo.points_count === 0 || overwrite) {
             if (collectionInfo.points_count > 0 && isFirstBatch) {
                 await client.delete(collectionName, { filter: {} })
-                logger.info('Collection cleared.')
+                logger.info('Qdrant: Collection cleared.')
             }
             const points = chunks.map((chunk, index) => ({
                 id: index + idOffset,
@@ -64,11 +58,10 @@ export async function upsertEmbeddings(chunks, embeddings, collectionName, overw
                 payload: { text: chunk }
             }))
             await client.upsert(collectionName, { points })
-            logger.info('Embeddings upserted.')
+            logger.single('Qdrant: Embeddings upserted.')
         } else {
-            logger.info('Collection is not empty.')
+            logger.info('Qdrant: Collection is not empty.')
         }
-        logger.debug("Test 5")
     } catch (e) {
         logger.error(`Error upserting embeddings: ${e.message}`)
     }
@@ -81,15 +74,15 @@ export async function upsertEmbeddingsInBatches(chunks, collectionName, batchSiz
         let idOffset = 0
         let chunkLength = chunks.length
         for (let i = 0; i < chunkLength; i += batchSize) {
-            const chunkBatch = chunks.slice(i, i + batchSize)
-            const embeddingsBatch = await createEmbeddings(chunkBatch, batchSize)
-            await upsertEmbeddings(chunkBatch, embeddingsBatch, collectionName, overwrite, isFirstBatch, idOffset)
             const idStart = idOffset
             const idEnd = idOffset + batchSize
             const idRange = idEnd > chunkLength ? chunkLength : idEnd
+            logger.process(`Processing embeddings [${idStart + 1}-${idRange}/${chunkLength}]: ${Math.round(idStart / chunkLength * 100)}%`)
+            const chunkBatch = chunks.slice(i, i + batchSize)
+            const embeddingsBatch = await createEmbeddings(chunkBatch, batchSize)
+            await upsertEmbeddings(chunkBatch, embeddingsBatch, collectionName, overwrite, isFirstBatch, idOffset)
             isFirstBatch = false
             idOffset += batchSize
-            logger.process(`Upserted embeddings [${idStart + 1}-${idRange}/${chunkLength}]`)
         }
         const endTime = Date.now()
         logger.info(`Execution time [vector.js/upsertEmbeddingsInBatches]: ${((endTime - startTime) / 1000).toFixed(1)}s`)

@@ -16,9 +16,6 @@ export async function createEmbeddings(chunks, batchSize) {
         allEmbeddings.push(...embeddingsBatch)
     }
     const endTime = Date.now()
-    // logger.single(`Embeddings object: ${JSON.stringify(allEmbeddings)}`)
-    logger.debug(`Embeddings length: ${allEmbeddings.length}`)
-    // logger.single(`Embeddings object: ${JSON.stringify(allEmbeddings[0])}`)
     logger.info(`Execution time [embedding.js/createEmbeddings]: ${((endTime - startTime) / 1000).toFixed(1)}s`)
     return allEmbeddings
 }

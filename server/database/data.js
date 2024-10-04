@@ -67,7 +67,7 @@ export async function initializeData() {
         return await Promise.all(chunks.map(chunk => formatTextFromChunk(chunk)))
     })
     const formattedChunksArray = await Promise.all(formattedChunkPromises)
-    const formattedChunks = formattedChunksArray.flat().slice(0, 100)
+    const formattedChunks = formattedChunksArray.flat()
     logger.count(`Chunks [#]: ${formattedChunks.length}`)
     return formattedChunks
 }

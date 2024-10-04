@@ -7,8 +7,7 @@ import chatHistoryRoute from './routes/chat-history.route.js'
 import llmAnswersRoute from './routes/llm-answers.route.js'
 import userRoute from './routes/user.route.js'
 import { initializeData, testFunctions } from './database/data.js'
-import { createEmbeddings } from "./database/embedding.js"
-import { startQdrant, createQdrantCollection, upsertEmbeddings, upsertEmbeddingsInBatches } from './database/vector.js'
+import { startQdrant, createQdrantCollection, upsertEmbeddingsInBatches } from './database/vector.js'
 import { initDB, startMongoDb } from './database/mongo.js'
 
 const app = express()
@@ -40,9 +39,6 @@ async function startServer() {
     if (!dataAvailable) {
         try {
             const chunks = await initializeData()
-            // const embeddings = await createEmbeddings(chunks)
-            // const embeddings = null
-            // await upsertEmbeddings(chunks, embeddings, collectionName, true)
             await upsertEmbeddingsInBatches(chunks, collectionName, 30, true)
         } catch (e) {
             console.error(`Error creating embeddings: ${e.message}`)
