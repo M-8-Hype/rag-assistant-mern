@@ -33,15 +33,15 @@ app.use('/api/users', userRoute)
 
 async function startServer() {
     await startQdrant()
-    const collectionName = 'myCollectionShort'
+    const collectionName = 'myCollectionShort-new'
     await createQdrantCollection(collectionName)
 
-    const dataAvailable = true
+    const dataAvailable = false
     if (!dataAvailable) {
         try {
             const chunks = await initializeData()
             const embeddings = await createEmbeddings(chunks)
-            await upsertEmbeddings(chunks, embeddings, collectionName, false)
+            await upsertEmbeddings(chunks, embeddings, collectionName, true)
         } catch (e) {
             console.error(`Error creating embeddings: ${e.message}`)
         }
@@ -55,6 +55,6 @@ async function startServer() {
     })
 }
 
-// startServer()
+startServer()
 
-testFunctions()
+// testFunctions()

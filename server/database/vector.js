@@ -1,5 +1,6 @@
 import { QdrantClient } from "@qdrant/js-client-rest"
 import startContainer from '../docker/container.js'
+import logger from '../config/logger.js'
 
 const QDRANT_HTTP_PORT = process.env.QDRANT_HTTP_PORT || 6333
 const QDRANT_GRPC_PORT = process.env.QDRANT_GRPC_PORT || 6334
@@ -43,21 +44,33 @@ export async function createQdrantCollection(collectionName) {
 }
 
 export async function upsertEmbeddings(chunks, embeddings, collectionName, overwrite = false) {
-    const points = chunks.map((chunk, index) => ({
-        id: index,
-        vector: Array.from(embeddings[index].data),
-        payload: { text: chunk }
-    }))
-    const collectionInfo = await client.getCollection(collectionName)
-    if (collectionInfo.points_count === 0 || overwrite) {
-        if (collectionInfo.points_count > 0) {
-            await client.delete(collectionName, { filter: {} })
-            console.log('Collection cleared.')
+    try {
+        logger.debug("Test 1")
+        const startTime = Date.now()
+        logger.debug("Test 2")
+        const points = chunks.map((chunk, index) => ({
+            id: index,
+            vector: Array.from(embeddings[index].data),
+            payload: { text: chunk }
+        }))
+        logger.debug("Test 3")
+        const collectionInfo = await client.getCollection(collectionName)
+        logger.debug("Test 4")
+        if (collectionInfo.points_count === 0 || overwrite) {
+            if (collectionInfo.points_count > 0) {
+                await client.delete(collectionName, { filter: {} })
+                logger.info('Collection cleared.')
+            }
+            await client.upsert(collectionName, { points })
+            logger.info('Embeddings upserted.')
+        } else {
+            logger.info('Collection is not empty.')
         }
-        await client.upsert(collectionName, { points })
-        console.log('Embeddings upserted.')
-    } else {
-        console.log('Collection is not empty.')
+        logger.debug("Test 5")
+        const endTime = Date.now()
+        logger.info(`Execution time [vector.js/upsertEmbeddings]: ${((endTime - startTime) / 1000).toFixed(1)}s`)
+    } catch (e) {
+        logger.error(`Error upserting embeddings: ${e.message}`)
     }
 }
 

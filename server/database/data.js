@@ -13,8 +13,8 @@ async function getUrlsFromSitemap(sitemapUrl) {
         const xml = await response.text()
         const result = await parseStringPromise(xml)
         const urls = result.urlset.url.map(url => url.loc[0])
-        const filteredUrls = urls.filter(url => !/\d+\.\d+(-\w+)?/.test(url) && !url.includes('api'))
-        logger.info(`URLs [#]: ${filteredUrls.length}`)
+        const filteredUrls = urls.filter(url => !/\d+\.\d+(-\w+)?/.test(url) && !url.includes('api')).slice(0, 1)
+        logger.count(`URLs [#]: ${filteredUrls.length}`)
         return filteredUrls
     } catch (e) {
         console.error('Error fetching or parsing sitemap:', e.message)
@@ -28,7 +28,7 @@ async function scrapeTextFromUrl(url) {
         const $ = load(html)
         const paragraphs = $('p').map((i, el) => $(el).text().trim()).get()
         const textString = paragraphs.join('\n')
-        logger.info(`String length: ${textString.length}`)
+        logger.single(`String length: ${textString.length}`)
         return textString
     } catch (e) {
         console.error('Error scraping text from URL:', e.message)
@@ -41,14 +41,12 @@ async function chunkText(text, url) {
             chunkSize: 1000,
             chunkOverlap: 200
         })
-        const splitDocument = await splitter.splitDocuments([
+        return await splitter.splitDocuments([
             new Document({
                 pageContent: text,
-                metadata: { source: url }
+                metadata: {source: url}
             })
         ])
-        logger.info(`Chunks [#]: ${splitDocument.length}`)
-        return splitDocument
     } catch (e) {
         console.error('Error splitting text:', e.message)
     }
@@ -62,21 +60,25 @@ async function formatTextFromChunk(chunk) {
 
 export async function initializeData() {
     const urls = await getUrlsFromSitemap(sitemapUrl)
-    const formattedChunkPromises = urls.map(async (url) => {
+    const formattedChunkPromises = urls.map(async (url, index) => {
+        logger.process(`Processing URL [${index + 1}/${urls.length}]: ${url}`)
         const text = await scrapeTextFromUrl(url)
         const chunks = await chunkText(text, url)
         return await Promise.all(chunks.map(chunk => formatTextFromChunk(chunk)))
     })
-    const formattedChunks = await Promise.all(formattedChunkPromises)
-    return formattedChunks.flat().slice(0, 10)
+    const formattedChunksArray = await Promise.all(formattedChunkPromises)
+    const formattedChunks = formattedChunksArray.flat().slice(0, 100)
+    logger.count(`Chunks [#]: ${formattedChunks.length}`)
+    return formattedChunks
 }
 
 // Only for testing purposes for smaller code snippets.
 export async function testFunctions() {
-    const urls = await getUrlsFromSitemap(sitemapUrl)
-    const scrapedText = await scrapeTextFromUrl(urls[0])
-    const chunks = await chunkText(scrapedText, urls[0])
+    // const urls = await getUrlsFromSitemap(sitemapUrl)
+    // const scrapedText = await scrapeTextFromUrl(urls[0])
+    // const chunks = await chunkText(scrapedText, urls[0])
     // console.log(chunks[0].pageContent)
     // const formattedChunk = await formatTextFromChunk(chunks[0])
     // console.log(formattedChunk)
+    initializeData()
 }
