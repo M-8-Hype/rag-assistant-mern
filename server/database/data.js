@@ -11,6 +11,7 @@ async function getUrlsFromSitemap(sitemapUrl) {
         const xml = await response.text()
         const result = await parseStringPromise(xml)
         const urls = result.urlset.url.map(url => url.loc[0])
+        // TODO: Remove slice.
         const filteredUrls = urls.filter(url => !/\d+\.\d+(-\w+)?/.test(url) && !url.includes('api')).slice(0, 1)
         logger.count(`URLs [#]: ${filteredUrls.length}`)
         return filteredUrls
@@ -57,6 +58,7 @@ async function formatTextFromChunk(chunk) {
 }
 
 export async function initializeData(urls, sitemapUrl = null) {
+    // TODO: Handle response when no URLs are found.
     if (sitemapUrl) {
         urls = await getUrlsFromSitemap(sitemapUrl)
     }

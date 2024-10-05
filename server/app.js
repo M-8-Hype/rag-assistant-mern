@@ -7,8 +7,8 @@ import chatHistoryRoute from './routes/chat-history.route.js'
 import llmAnswersRoute from './routes/llm-answers.route.js'
 import userRoute from './routes/user.route.js'
 import databaseRoute from './routes/database.route.js'
-import { initializeData, testFunctions } from './database/data.js'
-import { startQdrant, createQdrantCollection, upsertEmbeddingsInBatches } from './database/vector.js'
+import { testFunctions } from './database/data.js'
+import { startQdrant } from './database/vector.js'
 import { initDB, startMongoDb } from './database/mongo.js'
 
 const app = express()

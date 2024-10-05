@@ -9,9 +9,10 @@ export async function getDatabases(reqQuery, callback) {
     }
 }
 
-export async function createDatabase(reqBody, callback) {
+export async function createDatabase(reqBody, collectionName, callback) {
+    const databaseDetails = Object.assign({}, reqBody, { name: collectionName })
     try {
-        const database = await DatabaseModel.create(reqBody)
+        const database = await DatabaseModel.create(databaseDetails)
         return callback(null, database)
     } catch (err) {
         return callback(err, null)

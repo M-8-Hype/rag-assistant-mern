@@ -7,7 +7,7 @@ const DatabaseSchema = new mongoose.Schema({
     genre: { type: [String], default: [] },
     category: [{ type: String, enum: ['walkthrough', 'controls'], default: ['walkthrough'] }],
     metadata: {
-        baseUrls: { type: [String], default: [] },
+        baseUrl: { type: String, required: true },
         urls: { type: [String], default: [] },
         count: {
             urls: { type: Number, default: 0 },

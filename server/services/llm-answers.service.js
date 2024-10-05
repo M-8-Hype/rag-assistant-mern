@@ -4,7 +4,6 @@ import UserModel from '../models/user.model.js'
 const llmApiKey = process.env.LLM_API_KEY
 
 export async function getLlmAnswer(reqBody, query, callback) {
-    // console.log('Request body:', reqBody)
     try {
         const response = await callPerplexityApi(reqBody.prompt, query, reqBody.selectedHistory, reqBody.language)
         const answer = response.choices[0].message.content
