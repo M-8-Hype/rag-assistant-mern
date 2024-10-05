@@ -1,5 +1,6 @@
 import express from 'express'
 import { createDatabase, getDatabases } from '../services/database.service.js'
+import { createVectorCollection } from '../middleware/create-vector-collection.js'
 
 const router = express.Router()
 
@@ -13,7 +14,7 @@ router.get('/', (req, res) => {
     })
 })
 
-router.post('/', (req, res) => {
+router.post('/', createVectorCollection, (req, res) => {
     createDatabase(req.body, (err, result) => {
         if (result) {
             res.status(201).json(result)

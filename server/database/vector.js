@@ -85,6 +85,7 @@ export async function upsertEmbeddingsInBatches(chunks, collectionName, batchSiz
             idOffset += batchSize
         }
         const endTime = Date.now()
+        logger.process(`Finished processing embeddings: 100%`)
         logger.info(`Execution time [vector.js/upsertEmbeddingsInBatches]: ${((endTime - startTime) / 1000).toFixed(1)}s`)
     } catch (e) {
         logger.error(`Error upserting embeddings in batches: ${e.message}`)

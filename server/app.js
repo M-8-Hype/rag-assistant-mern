@@ -34,19 +34,6 @@ app.use('/api/databases', databaseRoute)
 
 async function startServer() {
     await startQdrant()
-    const collectionName = 'myCollectionShort-new'
-    await createQdrantCollection(collectionName)
-
-    const dataAvailable = true
-    if (!dataAvailable) {
-        try {
-            const chunks = await initializeData()
-            await upsertEmbeddingsInBatches(chunks, collectionName, 30, true)
-        } catch (e) {
-            console.error(`Error creating embeddings: ${e.message}`)
-        }
-    }
-
     await startMongoDb()
     await initDB()
 

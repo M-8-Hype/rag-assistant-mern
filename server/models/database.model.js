@@ -1,10 +1,14 @@
 import mongoose from 'mongoose'
 
 const DatabaseSchema = new mongoose.Schema({
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
     version: { type: String, required: true },
+    game: { type: String, required: true },
+    genre: { type: [String], default: [] },
+    category: [{ type: String, enum: ['walkthrough', 'controls'], default: ['walkthrough'] }],
     metadata: {
-        baseUrl: { type: String, required: true },
+        baseUrls: { type: [String], default: [] },
+        urls: { type: [String], default: [] },
         count: {
             urls: { type: Number, default: 0 },
             chunks: { type: Number, default: 0 }

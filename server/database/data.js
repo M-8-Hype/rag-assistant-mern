@@ -5,8 +5,6 @@ import { Document } from '@langchain/core/documents'
 import { load } from 'cheerio'
 import logger from '../config/logger.js'
 
-const sitemapUrl = 'https://docs.spring.io/spring-boot/sitemap.xml'
-
 async function getUrlsFromSitemap(sitemapUrl) {
     try {
         const response = await fetch(sitemapUrl)
@@ -58,8 +56,10 @@ async function formatTextFromChunk(chunk) {
     return `Context: ${text}; \nSource: ${source}`
 }
 
-export async function initializeData() {
-    const urls = await getUrlsFromSitemap(sitemapUrl)
+export async function initializeData(urls, sitemapUrl = null) {
+    if (sitemapUrl) {
+        urls = await getUrlsFromSitemap(sitemapUrl)
+    }
     const formattedChunkPromises = urls.map(async (url, index) => {
         logger.process(`Processing URL [${index + 1}/${urls.length}]: ${url}`)
         const text = await scrapeTextFromUrl(url)
@@ -69,7 +69,7 @@ export async function initializeData() {
     const formattedChunksArray = await Promise.all(formattedChunkPromises)
     const formattedChunks = formattedChunksArray.flat()
     logger.count(`Chunks [#]: ${formattedChunks.length}`)
-    return formattedChunks
+    return formattedChunks.slice(0, 10)
 }
 
 // Only for testing purposes for smaller code snippets.
