@@ -9,8 +9,9 @@ export async function getDatabases(reqQuery, callback) {
     }
 }
 
-export async function createDatabase(reqBody, collectionName, callback) {
-    const databaseDetails = Object.assign({}, reqBody, { name: collectionName })
+export async function createDatabase(reqBody, resObject, callback) {
+    const databaseDetails = Object.assign({}, reqBody, { name: resObject.collectionName })
+    Object.assign(databaseDetails.metadata, { count: { urls: resObject.urlCount, chunks: resObject.chunkCount } })
     try {
         const database = await DatabaseModel.create(databaseDetails)
         return callback(null, database)

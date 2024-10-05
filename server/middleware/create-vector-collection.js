@@ -9,8 +9,7 @@ export async function createVectorCollection(req, res, next) {
     res.locals.collectionName = collectionName
     try {
         await createQdrantCollection(collectionName)
-        // TODO: Handle all URLs.
-        const chunks = await initializeData(urls.slice(0, 1))
+        const chunks = await initializeData(res, urls)
         await upsertEmbeddingsInBatches(chunks, collectionName, 30, true)
         next()
     } catch (e) {

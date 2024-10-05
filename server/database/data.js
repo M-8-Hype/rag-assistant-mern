@@ -57,11 +57,12 @@ async function formatTextFromChunk(chunk) {
     return `Context: ${text}; \nSource: ${source}`
 }
 
-export async function initializeData(urls, sitemapUrl = null) {
+export async function initializeData(resObject, urls, sitemapUrl = null) {
     // TODO: Handle response when no URLs are found.
     if (sitemapUrl) {
         urls = await getUrlsFromSitemap(sitemapUrl)
     }
+    resObject.locals.urlCount = urls.length
     const formattedChunkPromises = urls.map(async (url, index) => {
         logger.process(`Processing URL [${index + 1}/${urls.length}]: ${url}`)
         const text = await scrapeTextFromUrl(url)
@@ -70,8 +71,9 @@ export async function initializeData(urls, sitemapUrl = null) {
     })
     const formattedChunksArray = await Promise.all(formattedChunkPromises)
     const formattedChunks = formattedChunksArray.flat()
+    resObject.locals.chunkCount = formattedChunks.length
     logger.count(`Chunks [#]: ${formattedChunks.length}`)
-    return formattedChunks.slice(0, 10)
+    return formattedChunks
 }
 
 // Only for testing purposes for smaller code snippets.

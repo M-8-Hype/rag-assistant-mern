@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', createVectorCollection, (req, res) => {
-    createDatabase(req.body, res.locals.collectionName, (err, result) => {
+    createDatabase(req.body, res.locals, (err, result) => {
         if (result) {
             res.status(201).json(result)
         } else {
