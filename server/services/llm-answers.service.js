@@ -1,5 +1,6 @@
 import ChatHistoryModel from '../models/chat-history.model.js'
 import UserModel from '../models/user.model.js'
+import dedent from 'dedent-js'
 
 const llmApiKey = process.env.LLM_API_KEY
 
@@ -39,7 +40,7 @@ async function callPerplexityApi(prompt, query, history, language) {
     Step 5: Please clearly state the source of your answer.
     Step 6: Please respond to all queries in ${languageMap[language]}. Do not use any other language for your responses.`
     console.log('User content:\n' + prompt)
-    console.log('System content:\n' + instruction)
+    console.log('System content:\n' + dedent(instruction))
     const options = {
             method: 'POST',
             headers: {
@@ -49,7 +50,7 @@ async function callPerplexityApi(prompt, query, history, language) {
             body: JSON.stringify({
                 model: 'llama-3.1-sonar-small-128k-chat',
                 messages: [
-                    { role: 'system', content: instruction },
+                    { role: 'system', content: dedent(instruction) },
                     { role: 'user', content: prompt }
                 ]
         })

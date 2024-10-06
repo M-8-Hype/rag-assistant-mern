@@ -1,6 +1,7 @@
 import { addColors, createLogger, format, transports } from 'winston'
 
 const { combine, timestamp, label, printf } = format
+
 const customLevels = {
     levels: {
         error: 0,
