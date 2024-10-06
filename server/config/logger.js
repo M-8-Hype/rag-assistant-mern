@@ -28,7 +28,7 @@ const customFormat = printf(({ level, message, label, timestamp }) => {
 })
 
 const logger = createLogger({
-    level: 'count',
+    level: 'single',
     levels: customLevels.levels,
     format: combine(
         // label({ label: 'TESTING' }),

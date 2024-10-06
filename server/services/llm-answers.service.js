@@ -1,6 +1,7 @@
 import ChatHistoryModel from '../models/chat-history.model.js'
 import UserModel from '../models/user.model.js'
 import dedent from 'dedent-js'
+import logger from '../config/logger.js'
 
 const llmApiKey = process.env.LLM_API_KEY
 
@@ -39,8 +40,8 @@ async function callPerplexityApi(prompt, query, history, language) {
     Step 4: Do not use any external knowledge or information not included in the context.
     Step 5: Please clearly state the source of your answer.
     Step 6: Please respond to all queries in ${languageMap[language]}. Do not use any other language for your responses.`
-    console.log('User content:\n' + prompt)
-    console.log('System content:\n' + dedent(instruction))
+    logger.single('User content:\n' + prompt)
+    logger.single('System content:\n' + dedent(instruction))
     const options = {
             method: 'POST',
             headers: {
@@ -71,7 +72,7 @@ async function saveLlmAnswer(prompt, answer, userNickname) {
             userID: user._id,
         }
         await ChatHistoryModel.create(newAnswer)
-        console.log('Answer saved successfully')
+        logger.process('Answer saved successfully')
     } catch (e) {
         console.error('Error saving answer:', e)
         throw e

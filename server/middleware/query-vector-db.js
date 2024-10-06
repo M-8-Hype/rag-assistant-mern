@@ -1,5 +1,6 @@
 import { createEmbeddings } from '../database/embedding.js'
 import { client } from '../database/vector.js'
+import logger from '../config/logger.js'
 
 export async function queryVectorDatabase(req, res, next) {
     const { prompt: query, database } = req.body
@@ -11,6 +12,7 @@ export async function queryVectorDatabase(req, res, next) {
             limit: 3,
             with_payload: true
         })
+        logger.single(`Query answer:\n${JSON.stringify(queryAnswer)}`)
         res.locals.llmText = convertQueryToText(queryAnswer)
         next()
     } catch (e) {

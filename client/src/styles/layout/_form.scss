@@ -4,6 +4,7 @@ form {
     select {
         padding: 4px;
         border-radius: 0.4rem;
+        min-width: 150px;
         option {
             background-color: dark.$background-primary-color;
         }

@@ -31,7 +31,6 @@ export async function getChatHistory(reqQuery, callback) {
             return `Query: #${index}\nQuestion: ${chatQuery.inputText}\nAnswer: ${chatQuery.outputText}`
         }).join('\n----------\n')
         const printText = dedent(prependedText).concat('\n', textChatHistory)
-        console.log(printText)
         if (isWriteToFile) {
             const lowerCaseNickname = query.nickname.replaceAll(' ', '').toLowerCase()
             await writeToFile(printText, './output', `chat-history-${lowerCaseNickname}.txt`)

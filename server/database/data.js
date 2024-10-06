@@ -106,9 +106,15 @@ export async function initializeData(reqObject, resObject) {
         const formattedChunks = await Promise.all(chunks.map(chunk => formatTextFromChunk(chunk)))
         formattedChunksArray.push(...formattedChunks)
     }
-    resObject.locals.chunkCount = formattedChunksArray.length
-    logger.count(`Chunks [#]: ${formattedChunksArray.length}`)
-    return formattedChunksArray
+
+    const TEST = formattedChunksArray.slice(0, 10)
+    resObject.locals.chunkCount = TEST.length
+    logger.count(`Chunks [#]: ${TEST.length}`)
+    return TEST
+
+    // resObject.locals.chunkCount = formattedChunksArray.length
+    // logger.count(`Chunks [#]: ${formattedChunksArray.length}`)
+    // return formattedChunksArray
 }
 
 // Only for testing purposes for smaller code snippets.
