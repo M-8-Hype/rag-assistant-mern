@@ -28,6 +28,7 @@ async function scrapeTextFromUrl(url) {
         const paragraphs = $('p').map((i, el) => $(el).text().trim()).get()
         const textString = paragraphs.join('\n')
         logger.single(`String length: ${textString.length}`)
+
         return textString
     } catch (e) {
         console.error('Error scraping text from URL:', e.message)
@@ -57,23 +58,29 @@ async function formatTextFromChunk(chunk) {
     return `Context: ${text}; \nSource: ${source}`
 }
 
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 export async function initializeData(resObject, urls, sitemapUrl = null) {
     // TODO: Handle response when no URLs are found.
     if (sitemapUrl) {
         urls = await getUrlsFromSitemap(sitemapUrl)
     }
     resObject.locals.urlCount = urls.length
-    const formattedChunkPromises = urls.map(async (url, index) => {
+    const formattedChunksArray = []
+    for (let index = 0; index < urls.length; index++) {
+        const url = urls[index]
+        await delay(2000)
         logger.process(`Processing URL [${index + 1}/${urls.length}]: ${url}`)
         const text = await scrapeTextFromUrl(url)
         const chunks = await chunkText(text, url)
-        return await Promise.all(chunks.map(chunk => formatTextFromChunk(chunk)))
-    })
-    const formattedChunksArray = await Promise.all(formattedChunkPromises)
-    const formattedChunks = formattedChunksArray.flat()
-    resObject.locals.chunkCount = formattedChunks.length
-    logger.count(`Chunks [#]: ${formattedChunks.length}`)
-    return formattedChunks
+        const formattedChunks = await Promise.all(chunks.map(chunk => formatTextFromChunk(chunk)))
+        formattedChunksArray.push(...formattedChunks)
+    }
+    resObject.locals.chunkCount = formattedChunksArray.length
+    logger.count(`Chunks [#]: ${formattedChunksArray.length}`)
+    return formattedChunksArray
 }
 
 // Only for testing purposes for smaller code snippets.
