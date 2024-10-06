@@ -5,7 +5,7 @@ import logger from '../config/logger.js'
 export async function queryVectorDatabase(req, res, next) {
     const { prompt: query, database } = req.body
     try {
-        const embedding = await createEmbeddings(query)
+        const embedding = await createEmbeddings([query], 1)
         const vector = Array.from(embedding[0])
         const queryAnswer = await client.query(database, {
             query: vector,
