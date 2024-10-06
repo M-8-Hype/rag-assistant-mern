@@ -2,11 +2,11 @@ import { createEmbeddings } from '../database/embedding.js'
 import { client } from '../database/vector.js'
 
 export async function queryVectorDatabase(req, res, next) {
-    const query = req.body.prompt
+    const { prompt: query, database } = req.body
     try {
         const embedding = await createEmbeddings(query)
         const vector = Array.from(embedding[0])
-        const queryAnswer = await client.query('myCollectionShort', {
+        const queryAnswer = await client.query(database, {
             query: vector,
             limit: 3,
             with_payload: true

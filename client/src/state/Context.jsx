@@ -12,24 +12,31 @@ export const SessionProvider = ({ children }) => {
     const [options, setOptions] = useState({
         users: [],
         languages: DROPDOWN_OPTIONS.languages,
-        databases: DROPDOWN_OPTIONS.databases
+        databases: []
     })
 
     useEffect(() => {
         async function fetchData() {
             try {
-                const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/users`)
-                const responseText = await res.json()
-                const users = []
-                responseText.forEach(user => {
-                    users.push({
-                        label: user.nickname,
-                        value: user.nickname
-                    })
-                })
-                setOptions(prevOptions => {
-                    return { ...prevOptions, users }
-                })
+                const [usersRes, databasesRes] = await Promise.all([
+                    fetch(`${import.meta.env.VITE_SERVER_URL}/users`),
+                    fetch(`${import.meta.env.VITE_SERVER_URL}/databases`)
+                ])
+                const usersData = await usersRes.json()
+                const databasesData = await databasesRes.json()
+                const users = usersData.map(user => ({
+                    label: user.nickname,
+                    value: user.nickname
+                }))
+                const databases = databasesData.map(database => ({
+                    label: database.game,
+                    value: database.name
+                }))
+                setOptions(prevOptions => ({
+                    ...prevOptions,
+                    users,
+                    databases
+                }))
             } catch (e) {
                 console.error(`Error: ${e}`)
             }
