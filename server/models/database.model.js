@@ -12,6 +12,10 @@ const DatabaseSchema = new mongoose.Schema({
         count: {
             urls: { type: Number, default: 0 },
             chunks: { type: Number, default: 0 }
+        },
+        model: {
+            name: { type: String, required: true },
+            dimensions: { type: Number, required: true }
         }
     }
 }, { timestamps: true })

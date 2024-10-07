@@ -1,11 +1,16 @@
 import { pipeline } from '@xenova/transformers'
 import logger from '../config/logger.js'
+import { TRANSFORMER_MODELS } from '../utils/constants.js'
 
-const extractorPromise = pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2')
+const { identifier } = TRANSFORMER_MODELS["MiniLM"]
+const extractorPromise = pipeline('feature-extraction', identifier)
 
-export async function createEmbeddings(chunks, batchSize) {
+export async function createEmbeddings(chunks, batchSize, resObject = null) {
     const startTime = Date.now()
     const extractor = await extractorPromise
+    if (resObject) {
+        resObject.locals.modelName = identifier
+    }
     const allEmbeddings = []
     for (let i = 0; i < chunks.length; i += batchSize) {
         const chunkBatch = chunks.slice(i, i + batchSize)

@@ -2,9 +2,11 @@ import { QdrantClient } from "@qdrant/js-client-rest"
 import startContainer from '../docker/container.js'
 import logger from '../config/logger.js'
 import { createEmbeddings } from './embedding.js'
+import { TRANSFORMER_MODELS } from '../utils/constants.js'
 
 const QDRANT_HTTP_PORT = process.env.QDRANT_HTTP_PORT || 6333
 const QDRANT_GRPC_PORT = process.env.QDRANT_GRPC_PORT || 6334
+const { dimensions } = TRANSFORMER_MODELS["MiniLM"]
 
 export const client = new QdrantClient({ host: "localhost", port: QDRANT_HTTP_PORT })
 
@@ -25,13 +27,13 @@ export async function startQdrant() {
     }
 }
 
-export async function createQdrantCollection(collectionName) {
+export async function createQdrantCollection(collectionName, resObject) {
     try {
         const exists = (await client.collectionExists(collectionName)).exists
         if (!exists) {
             await client.createCollection(collectionName, {
                 vectors: {
-                    size: 384,
+                    size: dimensions,
                     distance: 'Cosine'
                 }
             })
@@ -39,6 +41,7 @@ export async function createQdrantCollection(collectionName) {
         } else {
             console.log(`Collection ${collectionName} already exists.`)
         }
+        resObject.locals.modelDimensions = dimensions
     } catch (e) {
         console.error(`Error creating Qdrant collection: ${e.message}`)
     }
@@ -67,7 +70,7 @@ async function upsertEmbeddings(chunks, embeddings, collectionName, overwrite, i
     }
 }
 
-export async function upsertEmbeddingsInBatches(chunks, collectionName, batchSize = 30, overwrite = false) {
+export async function upsertEmbeddingsInBatches(chunks, collectionName, resObject, batchSize = 30, overwrite = false) {
     try {
         const startTime = Date.now()
         let isFirstBatch = true
@@ -79,7 +82,7 @@ export async function upsertEmbeddingsInBatches(chunks, collectionName, batchSiz
             const idRange = idEnd > chunkLength ? chunkLength : idEnd
             logger.process(`Processing embeddings [${idStart + 1}-${idRange}/${chunkLength}]: ${Math.round(idStart / chunkLength * 100)}%`)
             const chunkBatch = chunks.slice(i, i + batchSize)
-            const embeddingsBatch = await createEmbeddings(chunkBatch, batchSize)
+            const embeddingsBatch = await createEmbeddings(chunkBatch, batchSize, resObject)
             await upsertEmbeddings(chunkBatch, embeddingsBatch, collectionName, overwrite, isFirstBatch, idOffset)
             isFirstBatch = false
             idOffset += batchSize

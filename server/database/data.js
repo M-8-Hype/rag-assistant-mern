@@ -20,7 +20,7 @@ async function getSitemapUrl(baseUrl) {
 // Function must be adjusted to the specific sitemap structure.
 function createUrlList(baseUrl) {
     const urls = []
-    for (let i = 0; i <= 4; i++) {
+    for (let i = 0; i <= 21; i++) {
         const url = i === 0 ? baseUrl : `${baseUrl}/${i}`
         urls.push(url)
     }
@@ -107,14 +107,14 @@ export async function initializeData(reqObject, resObject) {
         formattedChunksArray.push(...formattedChunks)
     }
 
-    const TEST = formattedChunksArray.slice(0, 10)
-    resObject.locals.chunkCount = TEST.length
-    logger.count(`Chunks [#]: ${TEST.length}`)
-    return TEST
+    // const TEST = formattedChunksArray.slice(0, 10)
+    // resObject.locals.chunkCount = TEST.length
+    // logger.count(`Chunks [#]: ${TEST.length}`)
+    // return TEST
 
-    // resObject.locals.chunkCount = formattedChunksArray.length
-    // logger.count(`Chunks [#]: ${formattedChunksArray.length}`)
-    // return formattedChunksArray
+    resObject.locals.chunkCount = formattedChunksArray.length
+    logger.count(`Chunks [#]: ${formattedChunksArray.length}`)
+    return formattedChunksArray
 }
 
 // Only for testing purposes for smaller code snippets.

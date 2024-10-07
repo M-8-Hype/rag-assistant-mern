@@ -6,9 +6,9 @@ export async function createVectorCollection(req, res, next) {
     const collectionName = (game.replace(" ", "").toLowerCase()).concat("-", version)
     res.locals.collectionName = collectionName
     try {
-        await createQdrantCollection(collectionName)
+        await createQdrantCollection(collectionName, res)
         const chunks = await initializeData(req, res)
-        await upsertEmbeddingsInBatches(chunks, collectionName, 30, true)
+        await upsertEmbeddingsInBatches(chunks, collectionName, res, 30, true)
         next()
     } catch (e) {
         console.error(`Error creating embeddings: ${e.message}`)
