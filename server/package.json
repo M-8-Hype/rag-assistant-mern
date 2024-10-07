@@ -20,6 +20,9 @@
   },
   "author": "Alexander Suesskind <alexander.suesskind@yahoo.com>",
   "license": "CC-BY-ND-4.0",
+  "engines": {
+    "node": ">=18.17"
+  },
   "dependencies": {
     "@langchain/community": "^0.2.32",
     "@qdrant/js-client-rest": "^1.11.0",

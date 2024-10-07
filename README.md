@@ -7,7 +7,19 @@ This project is currently under development. Features and functionality may chan
 
 Before you can run the project locally, ensure you have met the following prerequisites:
 
-### 1. Generate Self-Signed Certificates for HTTPS (Development Only)
+### 1. System Requirements
+
+Before setting up the project, ensure that you have the following installed:
+
+- **Node.js**: Version 18.17 or higher is required for this project. You can download the latest version of Node.js from [nodejs.org](https://nodejs.org/).
+
+To check your current Node.js version, run the following command in your terminal:
+
+```bash
+node -v
+```
+
+### 2. Generate Self-Signed Certificates for HTTPS (Development Only)
 
 To enable HTTPS for your local development environment, you'll need to generate self-signed SSL/TLS certificates. Follow these steps using OpenSSL:
 
@@ -39,7 +51,7 @@ To enable HTTPS for your local development environment, you'll need to generate 
 
    This command creates a certificate (cert.pem) that is valid for 365 days.
 
-### 2. Environment Configuration
+### 3. Environment Configuration
 
 This project uses environment variables to manage configuration settings for both the client and server components. Environment variables are stored in `.env` files, which are not included in the repository for security reasons. Instead, we provide `.env.example` files that specify the required variables.
 
@@ -67,7 +79,7 @@ To set up your environment variables, follow these steps for both the client and
 
     - Open each `.env` file and fill in the necessary values for each variable. The `.env.example` files provide a template with placeholders that indicate what information needs to be provided.
 
-### 3. Starting Database Services
+### 4. Starting Database Services
 
 This application uses a vector database (Qdrant) for similarity search operations and a NoSQL database (MongoDB) for general data persistence. To start both services, ensure that Docker Desktop and/or the Docker daemon are running, since they are both running in Docker containers. By default, they use the following ports:
 
@@ -105,7 +117,7 @@ When terminating the Node server, the Docker container running the database serv
 docker stop qdrant mongodb
 ```
 
-### 4. Handling CORS Issues
+### 5. Handling CORS Issues
 
 The application uses the `cors` middleware to handle Cross-Origin Resource Sharing (CORS) issues. By default, the application allows requests from `localhost` on port `5173`. If you are running the client on a different port or domain, you can specify it in the corresponding `.env` file or may need to generally adjust the CORS settings in the `app.js` file. To learn more about CORS and how to handle these issues, refer to [MDN's CORS reference](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
 

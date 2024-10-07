@@ -20,9 +20,8 @@ async function getSitemapUrl(baseUrl) {
 // Function must be adjusted to the specific sitemap structure.
 function createUrlList(baseUrl) {
     const urls = []
-    for (let i = 0; i <= 21; i++) {
-        const url = i === 0 ? baseUrl : `${baseUrl}/${i}`
-        urls.push(url)
+    for (let i = 1; i <= 21; i++) {
+        urls.push(`${baseUrl}/${i}`)
     }
     return urls
 }
