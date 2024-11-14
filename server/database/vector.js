@@ -65,7 +65,7 @@ export async function upsertEmbeddingsInBatches(chunks, collectionName, resObjec
     try {
         const startTime = Date.now()
         let chunkLength = chunks.length
-        const collectionInfo = await client.getCollection(collectionName)
+        let collectionInfo = await client.getCollection(collectionName)
         let startId = 0
         let isFirstBatch = true
         if (!overwrite) {
@@ -85,6 +85,8 @@ export async function upsertEmbeddingsInBatches(chunks, collectionName, resObjec
             await upsertEmbeddings(chunkBatch, embeddingsBatch, collectionName, startId)
             startId += chunkBatch.length
         }
+        collectionInfo = await client.getCollection(collectionName)
+        resObject.locals.chunkCount = collectionInfo.points_count
         const endTime = Date.now()
         logger.process(`Finished processing embeddings: 100%`)
         logger.info(`Execution time [vector.js/upsertEmbeddingsInBatches]: ${((endTime - startTime) / 1000).toFixed(1)}s`)

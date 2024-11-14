@@ -106,7 +106,6 @@ export async function initializeData(reqObject, resObject) {
         const formattedChunks = await Promise.all(chunks.map(chunk => formatTextFromChunk(chunk)))
         formattedChunksArray.push(...formattedChunks)
     }
-    resObject.locals.chunkCount = formattedChunksArray.length
     logger.count(`Chunks [#]: ${formattedChunksArray.length}`)
     const endTime = Date.now()
     logger.info(`Execution time [data.js/initializeData]: ${((endTime - startTime) / 1000).toFixed(1)}s`)

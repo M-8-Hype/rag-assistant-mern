@@ -30,11 +30,11 @@ export async function createDatabase(reqBody, resObject, callback) {
                     'game': databaseDetails.game,
                     'genre': databaseDetails.genre,
                     'category': databaseDetails.category,
-                    'metadata.model': databaseDetails.metadata.model
+                    'metadata.model': databaseDetails.metadata.model,
+                    'metadata.count.chunks': databaseDetails.metadata.count.chunks
                 },
                 $inc: {
-                    'metadata.count.urls': databaseDetails.metadata.count.urls,
-                    'metadata.count.chunks': databaseDetails.metadata.count.chunks
+                    'metadata.count.urls': databaseDetails.metadata.count.urls
                 },
                 $addToSet: {
                     'metadata.urls': { $each: databaseDetails.metadata.urls },
