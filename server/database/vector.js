@@ -47,24 +47,15 @@ export async function createQdrantCollection(collectionName, resObject) {
     }
 }
 
-async function upsertEmbeddings(chunks, embeddings, collectionName, overwrite, isFirstBatch, idOffset) {
+async function upsertEmbeddings(chunks, embeddings, collectionName, startId) {
     try {
-        const collectionInfo = await client.getCollection(collectionName)
-        if (collectionInfo.points_count === 0 || overwrite) {
-            if (collectionInfo.points_count > 0 && isFirstBatch) {
-                await client.delete(collectionName, { filter: {} })
-                logger.info('Qdrant: Collection cleared.')
-            }
-            const points = chunks.map((chunk, index) => ({
-                id: index + idOffset,
-                vector: Array.from(embeddings[index].data),
-                payload: { text: chunk }
-            }))
-            await client.upsert(collectionName, { points })
-            logger.single('Qdrant: Embeddings upserted.')
-        } else {
-            logger.info('Qdrant: Collection is not empty.')
-        }
+        const points = chunks.map((chunk, index) => ({
+            id: startId + index,
+            vector: Array.from(embeddings[index].data),
+            payload: { text: chunk }
+        }))
+        await client.upsert(collectionName, { points })
+        logger.single('Qdrant: Embeddings upserted.')
     } catch (e) {
         logger.error(`Error upserting embeddings: ${e.message}`)
     }
@@ -73,19 +64,26 @@ async function upsertEmbeddings(chunks, embeddings, collectionName, overwrite, i
 export async function upsertEmbeddingsInBatches(chunks, collectionName, resObject, batchSize = 30, overwrite = false) {
     try {
         const startTime = Date.now()
-        let isFirstBatch = true
-        let idOffset = 0
         let chunkLength = chunks.length
+        const collectionInfo = await client.getCollection(collectionName)
+        let startId = 0
+        let isFirstBatch = true
+        if (!overwrite) {
+            startId = collectionInfo.points_count || 0
+        }
         for (let i = 0; i < chunkLength; i += batchSize) {
-            const idStart = idOffset
-            const idEnd = idOffset + batchSize
-            const idRange = idEnd > chunkLength ? chunkLength : idEnd
-            logger.process(`Processing embeddings [${idStart + 1}-${idRange}/${chunkLength}]: ${Math.round(idStart / chunkLength * 100)}%`)
             const chunkBatch = chunks.slice(i, i + batchSize)
             const embeddingsBatch = await createEmbeddings(chunkBatch, batchSize, resObject)
-            await upsertEmbeddings(chunkBatch, embeddingsBatch, collectionName, overwrite, isFirstBatch, idOffset)
-            isFirstBatch = false
-            idOffset += batchSize
+            if (overwrite && isFirstBatch && collectionInfo.points_count > 0) {
+                await client.delete(collectionName, { filter: {} })
+                logger.info('Qdrant: Collection cleared.')
+                startId = 0
+                isFirstBatch = false
+            }
+            const idRangeEnd = Math.min(i + batchSize, chunkLength)
+            logger.process(`Processing embeddings [${i + 1}-${idRangeEnd}/${chunkLength}]: ${Math.round(i / chunkLength * 100)}%`)
+            await upsertEmbeddings(chunkBatch, embeddingsBatch, collectionName, startId)
+            startId += chunkBatch.length
         }
         const endTime = Date.now()
         logger.process(`Finished processing embeddings: 100%`)
