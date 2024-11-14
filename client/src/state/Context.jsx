@@ -29,7 +29,7 @@ export const SessionProvider = ({ children }) => {
                     value: user.nickname
                 }))
                 const databases = databasesData.map(database => ({
-                    label: database.game,
+                    label: `${database.game} (${database.version})`,
                     value: database.name
                 }))
                 setOptions(prevOptions => ({

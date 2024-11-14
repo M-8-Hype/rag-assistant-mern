@@ -1,5 +1,4 @@
 import DatabaseModel from '../models/database.model.js'
-import logger from '../config/logger.js'
 
 export async function getDatabases(reqQuery, callback) {
     try {

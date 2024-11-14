@@ -2,7 +2,7 @@ import { pipeline } from '@xenova/transformers'
 import logger from '../config/logger.js'
 import { TRANSFORMER_MODELS } from '../utils/constants.js'
 
-const { identifier } = TRANSFORMER_MODELS["MiniLM"]
+const { identifier } = TRANSFORMER_MODELS["Jina DE"]
 const extractorPromise = pipeline('feature-extraction', identifier)
 
 export async function createEmbeddings(chunks, batchSize, resObject = null) {

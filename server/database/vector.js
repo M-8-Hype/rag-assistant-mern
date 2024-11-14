@@ -6,7 +6,7 @@ import { TRANSFORMER_MODELS } from '../utils/constants.js'
 
 const QDRANT_HTTP_PORT = process.env.QDRANT_HTTP_PORT || 6333
 const QDRANT_GRPC_PORT = process.env.QDRANT_GRPC_PORT || 6334
-const { dimensions } = TRANSFORMER_MODELS["MiniLM"]
+const { dimensions } = TRANSFORMER_MODELS["Jina DE"]
 
 export const client = new QdrantClient({ host: "localhost", port: QDRANT_HTTP_PORT })
 
@@ -37,13 +37,13 @@ export async function createQdrantCollection(collectionName, resObject) {
                     distance: 'Cosine'
                 }
             })
-            console.log(`Collection ${collectionName} has been created.`)
+            logger.single(`Qdrant: Collection ${collectionName} created.`)
         } else {
-            console.log(`Collection ${collectionName} already exists.`)
+            logger.single(`Qdrant: Collection ${collectionName} already exists.`)
         }
         resObject.locals.modelDimensions = dimensions
     } catch (e) {
-        console.error(`Error creating Qdrant collection: ${e.message}`)
+        logger.error(`Qdrant: Error creating Qdrant collection, ${e.message}.`)
     }
 }
 
@@ -94,25 +94,3 @@ export async function upsertEmbeddingsInBatches(chunks, collectionName, resObjec
         logger.error(`Error upserting embeddings in batches: ${e.message}`)
     }
 }
-
-// async function stopQdrant() {
-//     try {
-//         const container = docker.getContainer('qdrant')
-//         const containerInfo = await container.inspect()
-//
-//         if (containerInfo.State.Running) {
-//             await container.stop()
-//             console.log('Qdrant container stopped.')
-//         } else {
-//             console.log('Qdrant container is not running.')
-//         }
-//     } catch (error) {
-//         console.error(`Error stopping Qdrant container: ${error.message}`)
-//     }
-// }
-//
-// process.on('SIGINT', async () => {
-//     console.log('Caught interrupt signal (SIGINT)')
-//     await stopQdrant()
-//     process.exit(0)
-// })

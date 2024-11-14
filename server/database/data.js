@@ -20,7 +20,7 @@ async function getSitemapUrl(baseUrl) {
 // Function must be adjusted to the specific sitemap structure.
 function createUrlList(baseUrl) {
     const urls = []
-    for (let i = 1; i <= 21; i++) {
+    for (let i = 1; i <= 1; i++) {
         urls.push(`${baseUrl}/${i}`)
     }
     return urls
@@ -83,6 +83,7 @@ function delay(ms) {
 }
 
 export async function initializeData(reqObject, resObject) {
+    const startTime = Date.now()
     const { baseUrl, urls } = reqObject.body.metadata
     let urlsToScrape
     const sitemapUrl = await getSitemapUrl(baseUrl)
@@ -105,14 +106,10 @@ export async function initializeData(reqObject, resObject) {
         const formattedChunks = await Promise.all(chunks.map(chunk => formatTextFromChunk(chunk)))
         formattedChunksArray.push(...formattedChunks)
     }
-
-    // const TEST = formattedChunksArray.slice(0, 10)
-    // resObject.locals.chunkCount = TEST.length
-    // logger.count(`Chunks [#]: ${TEST.length}`)
-    // return TEST
-
     resObject.locals.chunkCount = formattedChunksArray.length
     logger.count(`Chunks [#]: ${formattedChunksArray.length}`)
+    const endTime = Date.now()
+    logger.info(`Execution time [data.js/initializeData]: ${((endTime - startTime) / 1000).toFixed(1)}s`)
     return formattedChunksArray
 }
 
