@@ -21,7 +21,28 @@ export async function createDatabase(reqBody, resObject, callback) {
         }
     }
     try {
-        const database = await DatabaseModel.create(databaseDetails)
+        const database = await DatabaseModel.findOneAndUpdate(
+            { name: resObject.collectionName },
+            {
+                $set: {
+                    'name': databaseDetails.name,
+                    'version': databaseDetails.version,
+                    'game': databaseDetails.game,
+                    'genre': databaseDetails.genre,
+                    'category': databaseDetails.category,
+                    'metadata.model': databaseDetails.metadata.model
+                },
+                $inc: {
+                    'metadata.count.urls': databaseDetails.metadata.count.urls,
+                    'metadata.count.chunks': databaseDetails.metadata.count.chunks
+                },
+                $addToSet: {
+                    'metadata.urls': { $each: databaseDetails.metadata.urls },
+                    'metadata.baseUrls': { $each: databaseDetails.metadata.baseUrls }
+                }
+            },
+            { new: true, upsert: true }
+        )
         return callback(null, database)
     } catch (err) {
         return callback(err, null)

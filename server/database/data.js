@@ -84,9 +84,9 @@ function delay(ms) {
 
 export async function initializeData(reqObject, resObject) {
     const startTime = Date.now()
-    const { baseUrl, urls } = reqObject.body.metadata
+    const { baseUrls, urls } = reqObject.body.metadata
     let urlsToScrape
-    const sitemapUrl = await getSitemapUrl(baseUrl)
+    const sitemapUrl = await getSitemapUrl(baseUrls[0])
     if (sitemapUrl) {
         urlsToScrape = await getUrlsFromSitemap(sitemapUrl)
     } else if (urls.length !== 0) {

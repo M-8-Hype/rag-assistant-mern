@@ -3,7 +3,7 @@ import { createQdrantCollection, upsertEmbeddingsInBatches } from '../database/v
 
 export async function createVectorCollection(req, res, next) {
     const { game, version } = req.body
-    const collectionName = (game.replace(" ", "").toLowerCase()).concat("-", version)
+    const collectionName = (game.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()).concat("-", version)
     res.locals.collectionName = collectionName
     try {
         await createQdrantCollection(collectionName, res)
