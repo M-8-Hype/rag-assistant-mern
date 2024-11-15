@@ -1,5 +1,9 @@
 @use "../../styles/themes/dark";
 
+.chatHistory {
+    margin-bottom: 20px;
+}
+
 .query {
     display: flex;
     align-items: flex-start;

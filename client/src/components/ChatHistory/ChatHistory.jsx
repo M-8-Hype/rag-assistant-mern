@@ -27,9 +27,9 @@ const ChatHistory = ({ chatHistory, showSelection, selectedQueries, setSelectedQ
     }
 
     return (
-        <div id="chatHistory">
+        <div id="chatHistory" className={styles.chatHistory}>
             <h3>Chat History</h3>
-            {chatHistoryDisplay}
+            {chatHistoryDisplay.length === 0 ? "There is no chat history." : chatHistoryDisplay}
         </div>
     )
 }

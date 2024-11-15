@@ -40,3 +40,18 @@ export async function getChatHistory(reqQuery, callback) {
         return callback(err, null)
     }
 }
+
+export async function updateLastChatHistoryEntry(reqQuery, reqBody, callback) {
+    try {
+        const user = await UserModel.findOne({ nickname: reqQuery.nickname })
+        const modifiedQuery = replaceKey(reqQuery, 'nickname', 'userID', user._id)
+        const updatedLastChatHistoryEntry = await ChatHistoryModel.findOneAndUpdate(
+            modifiedQuery,
+            { $set: reqBody },
+            { sort: { createdAt: -1 }, new: true }
+        )
+        return callback(null, updatedLastChatHistoryEntry)
+    } catch (err) {
+        return callback(err, null)
+    }
+}

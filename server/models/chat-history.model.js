@@ -5,7 +5,8 @@ const ChatHistorySchema = new mongoose.Schema({
     answer: { type: String, required: true },
     userID: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     tags: { type: [String], default: [] },
-    status: { type: String, enum: ['active', 'archived'], default: 'active' }
+    status: { type: String, enum: ['active', 'archived'], default: 'active' },
+    rating: { type: Number, default: 0 }
 }, { timestamps: true })
 
 const ChatHistoryModel = mongoose.model('ChatHistory', ChatHistorySchema)
