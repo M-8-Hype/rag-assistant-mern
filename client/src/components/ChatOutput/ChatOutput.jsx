@@ -4,7 +4,7 @@ import LoadingAnswer from '../LoadingAnswer/LoadingAnswer.jsx'
 import Message from '../Message/Message.jsx'
 import { MESSAGE_TYPE } from '../../utils/constants.js'
 
-const ChatOutput = ({ inputText, query, isLoading }) => {
+const ChatOutput = ({ inputText, query, isLoading, setShowRating, isButtonDisabled }) => {
     const [chatOutput, setChatOutput] = useState([])
 
     useEffect(() => {
@@ -23,11 +23,18 @@ const ChatOutput = ({ inputText, query, isLoading }) => {
         )
     )
 
+    const handleRateAnswer = () => {
+        setShowRating(true)
+    }
+
     return (
         <div className={styles.chatOutput} id="chatOutput">
             <h3>Active Conversation</h3>
             {chatOutput.length === 0 ? "There are no active messages." : chatOutputDisplay}
             {isLoading && <LoadingAnswer inputText={inputText}/>}
+            {isButtonDisabled && <button onClick={handleRateAnswer}>
+                Rate This Answer
+            </button>}
         </div>
     )
 }

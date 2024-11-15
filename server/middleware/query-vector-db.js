@@ -21,15 +21,15 @@ export async function queryVectorDatabase(req, res, next) {
         res.locals.llmText = convertQueryToText(queryAnswer)
 
         // Actual code:
-        // next()
+        next()
 
         // Testing code:
-        const filteredQueryAnswer = queryAnswer.points.map(point => ({
-            id: point.id,
-            score: point.score
-        }))
-        logger.single(`Response body (filtered):\n${JSON.stringify(filteredQueryAnswer)}`)
-        res.status(201).json(filteredQueryAnswer)
+        // const filteredQueryAnswer = queryAnswer.points.map(point => ({
+        //     id: point.id,
+        //     score: point.score
+        // }))
+        // logger.single(`Response body (filtered):\n${JSON.stringify(filteredQueryAnswer)}`)
+        // res.status(201).json(filteredQueryAnswer)
     } catch (e) {
         console.error('Error querying the database:', e.message)
         res.status(500).json({ "Error": "Internal database error." })

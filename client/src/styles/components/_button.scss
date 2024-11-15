@@ -12,7 +12,7 @@ button {
     cursor: pointer;
     transition: border-color 0.25s;
     min-height: 48px;
-    &:hover {
+    &:not(:disabled):hover {
         color: dark.$accent-primary-color;
         border-color: dark.$accent-primary-color;
     }
@@ -20,13 +20,23 @@ button {
     &:focus-visible {
         outline: 4px auto -webkit-focus-ring-color;
     }
-    [class*="chatInput"] & {
+    [class*="chatInput"] &,
+    [class*="chatOutput"] & {
         color: dark.$background-primary-color;
         background-color: dark.$accent-primary-color;
-        &:hover {
+        &:not(:disabled):hover {
             background-color: darken(dark.$accent-primary-color, 15%);
             color: dark.$auxiliary-secondary-color;
         }
+        &:disabled {
+            cursor: not-allowed;
+            color: dark.$auxiliary-tertiary-color;
+            background-color: rgba($color: dark.$auxiliary-primary-color, $alpha: 0.1);
+            border-color: dark.$auxiliary-tertiary-color;
+        }
+    }
+    [class*="chatOutput"] & {
+        margin-left: auto;
     }
 }
 

@@ -18,6 +18,8 @@ const ChatPage = () => {
     const [showSelection, setShowSelection] = useState(false)
     const [selectedQueries, setSelectedQueries] = useState([])
     const [showInstruction, setShowInstruction] = useState(false)
+    const [showRating, setShowRating] = useState(false)
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false)
     const { settings } = useContext(SessionContext)
 
     useEffect(() => {
@@ -32,6 +34,7 @@ const ChatPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         setIsLoading(true)
+        setIsButtonDisabled(true)
         const selection = chatHistory.filter(chatQuery => selectedQueries.includes(chatQuery._id))
         const selectedOutputText = selection.map((chatQuery, index) => {
             return `Query: #${index}\nQuestion: ${chatQuery.inputText}\nAnswer: ${chatQuery.outputText}`
@@ -76,7 +79,7 @@ const ChatPage = () => {
 
     return (
         <div className={styles.chatPage}>
-            <div className={showInstruction ? stylesModal.blurBackground : ''}>
+            <div className={showInstruction || showRating ? stylesModal.blurBackground : ''}>
                 <div className="button-box">
                     <Link to="/settings">
                         <button>Previous Page</button>
@@ -100,6 +103,8 @@ const ChatPage = () => {
                     inputText={inputText}
                     query={query}
                     isLoading={isLoading}
+                    setShowRating={setShowRating}
+                    isButtonDisabled={isButtonDisabled}
                 />
                 <form className={styles.chatInput} onSubmit={handleSubmit}>
                     <label htmlFor="name">Please enter your question here</label>
@@ -112,7 +117,10 @@ const ChatPage = () => {
                         onChange={handleChange}
                         required
                     />
-                    <button type="submit">
+                    <button
+                        type="submit"
+                        disabled={isButtonDisabled}
+                    >
                         Send
                     </button>
                 </form>
@@ -123,6 +131,10 @@ const ChatPage = () => {
             {showInstruction && <Modal setShowModal={setShowInstruction}>
                 <h3>Chat Instructions</h3>
                 {getChatInstructionsAsJsx()}
+            </Modal>}
+            {showRating && <Modal setShowModal={setShowRating}>
+                <h3>Rating</h3>
+                <p>Ratings here...</p>
             </Modal>}
         </div>
     )
