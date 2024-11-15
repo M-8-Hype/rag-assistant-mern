@@ -37,7 +37,10 @@ button {
         }
     }
     [class*="chatOutput"] & {
-        margin-left: auto;
+        margin: {
+            left: auto;
+            bottom: 20px;
+        }
     }
 }
 

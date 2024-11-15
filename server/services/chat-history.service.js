@@ -15,11 +15,11 @@ export async function getChatHistory(reqQuery, callback) {
         const user = await UserModel.findOne({ nickname: query.nickname })
         const modifiedQuery = replaceKey(query, 'nickname', 'userID', user._id)
         const chatHistory = await ChatHistoryModel.find(modifiedQuery)
-        const necessaryKeys = ['_id', 'prompt', 'answer']
+        const necessaryKeys = ['_id', 'prompt', 'answer', 'rating']
         let sanitizedChatHistory = filterObjects(chatHistory, necessaryKeys)
         sanitizedChatHistory = sanitizedChatHistory.map(chat => {
-            const { _id, prompt: inputText, answer: outputText } = chat
-            return { _id, inputText, outputText }
+            const { _id, prompt: inputText, answer: outputText, rating } = chat
+            return { _id, inputText, outputText, rating }
         })
         const prependedText =
             `[Chat history for:]
@@ -28,7 +28,7 @@ export async function getChatHistory(reqQuery, callback) {
             ${new Date().toUTCString()}
             -----------------------------`
         const textChatHistory = sanitizedChatHistory.map((chatQuery, index) => {
-            return `Query: #${index}\nQuestion: ${chatQuery.inputText}\nAnswer: ${chatQuery.outputText}`
+            return `Query: #${index + 1}\nRating: ${chatQuery.rating}\nQuestion: ${chatQuery.inputText}\nAnswer: ${chatQuery.outputText}`
         }).join('\n----------\n')
         const printText = dedent(prependedText).concat('\n', textChatHistory)
         if (isWriteToFile) {

@@ -31,7 +31,7 @@ const ChatOutput = ({ inputText, query, isLoading, setShowRating, isButtonDisabl
             <h3>Active Conversation</h3>
             {chatOutput.length === 0 ? "There are no active messages." : chatOutputDisplay}
             {isLoading && <LoadingAnswer inputText={inputText}/>}
-            {isButtonDisabled && <button onClick={handleRateAnswer}>
+            {isButtonDisabled && !isLoading && <button onClick={handleRateAnswer}>
                 Rate This Answer
             </button>}
         </div>

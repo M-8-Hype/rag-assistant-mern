@@ -8,6 +8,7 @@ import SessionContext from '../../state/Context.jsx'
 import { fetchChatHistory } from '../../utils/fetch.js'
 import Modal from '../../components/Modal/Modal.jsx'
 import { getChatInstructionsAsJsx } from '../../utils/texts.jsx'
+import { toast } from 'react-toastify'
 
 const ChatPage = () => {
     const [inputText, setInputText] = useState('')
@@ -79,10 +80,15 @@ const ChatPage = () => {
         }
         try {
             const queryParams = new URLSearchParams({ nickname: settings.user }).toString()
-            await fetch(`${import.meta.env.VITE_SERVER_URL}/chat-history?${queryParams}`, options)
-            setShowRating(false)
-            setSelectedRating(null)
-            setIsButtonDisabled(false)
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/chat-history?${queryParams}`, options)
+            if (res.ok) {
+                setShowRating(false)
+                setSelectedRating(null)
+                setIsButtonDisabled(false)
+                toast.success('Rating sent successfully!')
+            } else {
+                toast.error('Error sending rating. Please try again.')
+            }
         } catch (e) {
             console.error(`Error: ${e}`)
         }

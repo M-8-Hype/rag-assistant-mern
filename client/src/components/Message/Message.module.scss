@@ -11,9 +11,9 @@
         margin-top: 0;
         text-align: start;
     }
-    span,
-    p {
-        &:last-child {
+    & > *:last-child {
+        margin-bottom: 0;
+        & > *:last-child {
             margin-bottom: 0;
         }
     }
@@ -33,9 +33,14 @@
     }
 }
 
+.loading {
+    margin-bottom: 20px;
+}
+
 h3 {
     [class*="question"] &,
-    [class*="answer"] & {
+    [class*="answer"] &,
+    [class*="loading"] & {
         text-decoration: underline;
         text-underline-offset: 8px;
         text-decoration-color: dark.$accent-primary-color;
