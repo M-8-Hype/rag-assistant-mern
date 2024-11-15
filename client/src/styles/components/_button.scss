@@ -21,7 +21,8 @@ button {
         outline: 4px auto -webkit-focus-ring-color;
     }
     [class*="chatInput"] &,
-    [class*="chatOutput"] & {
+    [class*="chatOutput"] &,
+    div[id*="rating"] & {
         color: dark.$background-primary-color;
         background-color: dark.$accent-primary-color;
         &:not(:disabled):hover {

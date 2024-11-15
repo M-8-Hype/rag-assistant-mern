@@ -20,7 +20,7 @@ const ChatPage = () => {
     const [showInstruction, setShowInstruction] = useState(false)
     const [showRating, setShowRating] = useState(false)
     const [isButtonDisabled, setIsButtonDisabled] = useState(false)
-    const [selectedRating, setSelectedRating] = useState("")
+    const [selectedRating, setSelectedRating] = useState(null)
     const { settings } = useContext(SessionContext)
 
     useEffect(() => {
@@ -68,6 +68,24 @@ const ChatPage = () => {
 
     const handleSubmitRating = async (e) => {
         e.preventDefault()
+        const options = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                rating: selectedRating
+            })
+        }
+        try {
+            const queryParams = new URLSearchParams({ nickname: settings.user }).toString()
+            await fetch(`${import.meta.env.VITE_SERVER_URL}/chat-history?${queryParams}`, options)
+            setShowRating(false)
+            setSelectedRating(null)
+            setIsButtonDisabled(false)
+        } catch (e) {
+            console.error(`Error: ${e}`)
+        }
     }
 
     const handleShowHistory = () => {
@@ -83,7 +101,7 @@ const ChatPage = () => {
     }
 
     const handleRatingChange = (e) => {
-        setSelectedRating(e.target.value)
+        setSelectedRating(Number(e.target.value))
     }
 
     return (
@@ -155,7 +173,7 @@ const ChatPage = () => {
                                     type="radio"
                                     name="rating"
                                     value="1"
-                                    checked={selectedRating === "1"}
+                                    checked={selectedRating === 1}
                                     onChange={handleRatingChange}
                                 />
                             </div>
@@ -165,7 +183,7 @@ const ChatPage = () => {
                                     type="radio"
                                     name="rating"
                                     value="2"
-                                    checked={selectedRating === "2"}
+                                    checked={selectedRating === 2}
                                     onChange={handleRatingChange}
                                 />
                             </div>
@@ -175,7 +193,7 @@ const ChatPage = () => {
                                     type="radio"
                                     name="rating"
                                     value="3"
-                                    checked={selectedRating === "3"}
+                                    checked={selectedRating === 3}
                                     onChange={handleRatingChange}
                                 />
                             </div>
@@ -185,7 +203,7 @@ const ChatPage = () => {
                                     type="radio"
                                     name="rating"
                                     value="4"
-                                    checked={selectedRating === "4"}
+                                    checked={selectedRating === 4}
                                     onChange={handleRatingChange}
                                 />
                             </div>
@@ -195,12 +213,15 @@ const ChatPage = () => {
                                     type="radio"
                                     name="rating"
                                     value="5"
-                                    checked={selectedRating === "5"}
+                                    checked={selectedRating === 5}
                                     onChange={handleRatingChange}
                                 />
                             </div>
                         </div>
-                        <button type="submit">
+                        <button
+                            type="submit"
+                            disabled={selectedRating === null}
+                        >
                             Send Rating
                         </button>
                     </form>

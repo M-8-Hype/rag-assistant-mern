@@ -9,7 +9,6 @@ const ChatOutput = ({ inputText, query, isLoading, setShowRating, isButtonDisabl
 
     useEffect(() => {
         if (query) {
-            console.log(query)
             const newObject = Object.assign({}, { id: chatOutput.length }, query)
             setChatOutput(prevArray => [...prevArray, newObject])
         }
