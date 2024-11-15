@@ -43,7 +43,8 @@
     h3 {
         margin-top: 0;
     }
-    div[id*="chatInstructions"] {
+    div[id*="chatInstructions"],
+    div[id*="rating"], {
         & > :last-child {
             margin-bottom: 0;
         }

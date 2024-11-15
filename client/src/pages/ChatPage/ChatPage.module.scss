@@ -40,3 +40,23 @@
         margin-left: 16px;
     }
 }
+
+.ratingGrades {
+    display: flex;
+    flex-direction: column;
+    p {
+        margin-top: 0;
+    }
+    & > * {
+        margin-bottom: 8px;
+        display: flex;
+        width: fit-content;
+        align-self: center;
+        input {
+            margin: 0 8px;
+        }
+        &:last-child {
+            margin-bottom: 16px;
+        }
+    }
+}

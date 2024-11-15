@@ -20,6 +20,7 @@ const ChatPage = () => {
     const [showInstruction, setShowInstruction] = useState(false)
     const [showRating, setShowRating] = useState(false)
     const [isButtonDisabled, setIsButtonDisabled] = useState(false)
+    const [selectedRating, setSelectedRating] = useState("")
     const { settings } = useContext(SessionContext)
 
     useEffect(() => {
@@ -65,6 +66,10 @@ const ChatPage = () => {
         }
     }
 
+    const handleSubmitRating = async (e) => {
+        e.preventDefault()
+    }
+
     const handleShowHistory = () => {
         setShowHistory(prevState => !prevState)
     }
@@ -75,6 +80,10 @@ const ChatPage = () => {
 
     const handleShowInstruction = () => {
         setShowInstruction(prevState => !prevState)
+    }
+
+    const handleRatingChange = (e) => {
+        setSelectedRating(e.target.value)
     }
 
     return (
@@ -134,7 +143,68 @@ const ChatPage = () => {
             </Modal>}
             {showRating && <Modal setShowModal={setShowRating}>
                 <h3>Rating</h3>
-                <p>Ratings here...</p>
+                <div id="rating">
+                    <p>
+                        Please rate the answer you received by German school grades, ranging from 1 (best) to 5 (worst).
+                    </p>
+                    <form onSubmit={handleSubmitRating}>
+                        <div className={styles.ratingGrades}>
+                            <div>
+                                <label htmlFor="rating">1</label>
+                                <input
+                                    type="radio"
+                                    name="rating"
+                                    value="1"
+                                    checked={selectedRating === "1"}
+                                    onChange={handleRatingChange}
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="rating">2</label>
+                                <input
+                                    type="radio"
+                                    name="rating"
+                                    value="2"
+                                    checked={selectedRating === "2"}
+                                    onChange={handleRatingChange}
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="rating">3</label>
+                                <input
+                                    type="radio"
+                                    name="rating"
+                                    value="3"
+                                    checked={selectedRating === "3"}
+                                    onChange={handleRatingChange}
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="rating">4</label>
+                                <input
+                                    type="radio"
+                                    name="rating"
+                                    value="4"
+                                    checked={selectedRating === "4"}
+                                    onChange={handleRatingChange}
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="rating">5</label>
+                                <input
+                                    type="radio"
+                                    name="rating"
+                                    value="5"
+                                    checked={selectedRating === "5"}
+                                    onChange={handleRatingChange}
+                                />
+                            </div>
+                        </div>
+                        <button type="submit">
+                            Send Rating
+                        </button>
+                    </form>
+                </div>
             </Modal>}
         </div>
     )
