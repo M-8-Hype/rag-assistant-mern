@@ -44,16 +44,22 @@ async function getUrlsFromSitemap(sitemapUrl) {
 // Function must be adjusted to the specific scraping requirements.
 function getParagraphsSelector(input) {
     switch (input) {
-        case 'nms-1-1':
+        case 'nms-1':
             return '.mw-parser-output p:not(#toc p):not(figure p), ' +
                 '.mw-parser-output h2:not(#toc h2), ' +
                 '.mw-parser-output li:not(#toc li)'
-        case 'nms-2-1':
+        case 'nms-2':
             return '.entry-content p, ' +
                 '.entry-content h1'
-        case 'nms-3-1':
+        case 'nms-3':
             return '#articleTextBody p, ' +
                 '#articleTextBody h2:not(#artIdx1 h2):not(.artTicker h2)'
+        case 'nms-1-3':
+            return '.mw-parser-output p:not(#toc p):not(figure p):not(li.gallerybox p), ' +
+                '.mw-parser-output h2:not(#toc h2), ' +
+                '.mw-parser-output li:not(#toc li):not(.mw-references-wrap li):not(li.gallerybox), ' +
+                '.mw-parser-output h3, ' +
+                '.mw-parser-output table.wikitable'
         default:
             throw new Error('Invalid input parameter')
     }
@@ -64,11 +70,11 @@ async function scrapeTextFromUrl(url) {
         const response = await fetch(url)
         const html = await response.text()
         const $ = load(html)
-        const selector = getParagraphsSelector('nms-3-1')
+        const selector = getParagraphsSelector('nms-1-3')
         const paragraphs = $(selector).map((i, el) => {
             let text = $(el).text().trim()
             if ($(el).is('h1') || $(el).is('h2')) {
-                text = `${text}:`
+                text = `[${text.toUpperCase()}]:`
             } else if ($(el).is('li') && ($(el).parent().is('ol') || $(el).parent().is('ul'))) {
                 text = `- ${text}`
             }

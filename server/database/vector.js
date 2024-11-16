@@ -61,7 +61,7 @@ async function upsertEmbeddings(chunks, embeddings, collectionName, startId) {
     }
 }
 
-export async function upsertEmbeddingsInBatches(chunks, collectionName, resObject, batchSize = 30, overwrite = false) {
+export async function upsertEmbeddingsInBatches(chunks, collectionName, resObject, batchSize = 10, overwrite = false) {
     try {
         const startTime = Date.now()
         let chunkLength = chunks.length
