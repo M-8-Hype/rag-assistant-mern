@@ -41,14 +41,37 @@ async function getUrlsFromSitemap(sitemapUrl) {
     }
 }
 
+// Function must be adjusted to the specific scraping requirements.
+function getParagraphsSelector(input) {
+    switch (input) {
+        case 'nms-1-1':
+            return '.mw-parser-output p:not(#toc p):not(figure p), ' +
+                '.mw-parser-output h2:not(#toc h2), ' +
+                '.mw-parser-output li:not(#toc li)'
+
+        default:
+            throw new Error('Invalid input parameter')
+    }
+}
+
 async function scrapeTextFromUrl(url) {
     try {
         const response = await fetch(url)
         const html = await response.text()
         const $ = load(html)
-        const paragraphs = $('p, h2').map((i, el) => $(el).text().trim()).get()
+        const selector = getParagraphsSelector('nms-1-1')
+        const paragraphs = $(selector).map((i, el) => {
+            let text = $(el).text().trim()
+            if ($(el).is('h2')) {
+                text = `${text}:`
+            } else if ($(el).is('li') && ($(el).parent().is('ol') || $(el).parent().is('ul'))) {
+                text = `- ${text}`
+            }
+            return text
+        }).get()
         const textString = paragraphs.join('\n')
         logger.single(`String length: ${textString.length}`)
+        logger.single(`Text: ${textString}`)
         return textString
     } catch (e) {
         console.error('Error scraping text from URL:', e.message)
