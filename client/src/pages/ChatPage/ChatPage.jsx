@@ -39,7 +39,7 @@ const ChatPage = () => {
         setIsButtonDisabled(true)
         const selection = chatHistory.filter(chatQuery => selectedQueries.includes(chatQuery._id))
         const selectedOutputText = selection.map((chatQuery, index) => {
-            return `Query: #${index}\nQuestion: ${chatQuery.inputText}\nAnswer: ${chatQuery.outputText}`
+            return `Query: #${index + 1}\nQuestion: ${chatQuery.inputText}\nAnswer: ${chatQuery.outputText}`
         }).join('\n\n')
         const options = {
             method: 'POST',
@@ -115,10 +115,10 @@ const ChatPage = () => {
             <div className={showInstruction || showRating ? stylesModal.blurBackground : ''}>
                 <div className="button-box">
                     <Link to="/settings">
-                        <button>Previous Page</button>
+                        <button disabled={isButtonDisabled}>Previous Page</button>
                     </Link>
                     <Link to="/report">
-                        <button>Next Page</button>
+                        <button disabled={isButtonDisabled}>Next Page</button>
                     </Link>
                 </div>
                 <h2>Chat</h2>

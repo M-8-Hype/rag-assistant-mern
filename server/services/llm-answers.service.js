@@ -20,7 +20,9 @@ async function callPerplexityApi(prompt, query, history, language) {
     const additionalContext = history ?
         `You are provided with additional context from the conversation history between the user and the system:
         
-        ${history}` :
+        |CONTEXT:|
+        ${history}
+        |SOURCE:| Conversation history between user and system` :
         ''
     const languageMap = {
         en: 'English',
@@ -30,8 +32,8 @@ async function callPerplexityApi(prompt, query, history, language) {
 
     ${query}
     
-    ${additionalContext}
-    
+    ${dedent(additionalContext)}
+    ----------
     Now, please follow these steps:
     
     Step 1: Carefully read and understand the provided context passages.
@@ -49,7 +51,8 @@ async function callPerplexityApi(prompt, query, history, language) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                model: 'llama-3.1-sonar-small-128k-chat',
+                // model: 'llama-3.1-sonar-small-128k-chat',
+                model: 'llama-3.1-8b-instruct',
                 messages: [
                     { role: 'system', content: dedent(instruction) },
                     { role: 'user', content: prompt }

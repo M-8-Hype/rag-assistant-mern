@@ -8,7 +8,7 @@ export async function createVectorCollection(req, res, next) {
     try {
         await createQdrantCollection(collectionName, res)
         const chunks = await initializeData(req, res)
-        await upsertEmbeddingsInBatches(chunks, collectionName, res, 10, true)
+        await upsertEmbeddingsInBatches(chunks, collectionName, res, 10, false)
         next()
     } catch (e) {
         console.error(`Error creating embeddings: ${e.message}`)

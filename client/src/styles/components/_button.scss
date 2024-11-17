@@ -20,6 +20,12 @@ button {
     &:focus-visible {
         outline: 4px auto -webkit-focus-ring-color;
     }
+    &:disabled {
+        cursor: not-allowed;
+        color: dark.$auxiliary-tertiary-color;
+        background-color: rgba($color: dark.$auxiliary-primary-color, $alpha: 0.1);
+        border-color: dark.$auxiliary-tertiary-color;
+    }
     [class*="chatInput"] &,
     [class*="chatOutput"] &,
     div[id*="rating"] & {

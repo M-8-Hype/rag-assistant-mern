@@ -70,7 +70,7 @@ async function scrapeTextFromUrl(url) {
         const response = await fetch(url)
         const html = await response.text()
         const $ = load(html)
-        const selector = getParagraphsSelector('nms-1-3')
+        const selector = getParagraphsSelector('nms-3')
         const paragraphs = $(selector).map((i, el) => {
             let text = $(el).text().trim()
             if ($(el).is('h1') || $(el).is('h2')) {
@@ -109,7 +109,7 @@ async function chunkText(text, url) {
 async function formatTextFromChunk(chunk) {
     const text = chunk.pageContent
     const source = chunk.metadata.source
-    return `Context: ${text}; \nSource: ${source}`
+    return `|CONTEXT:| ${text}; \n|SOURCE:| ${source}`
 }
 
 function delay(ms) {
