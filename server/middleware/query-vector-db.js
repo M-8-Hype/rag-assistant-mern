@@ -12,7 +12,7 @@ export async function queryVectorDatabase(req, res, next) {
         const vector = Array.from(embedding[0])
         const queryAnswer = await client.query(database, {
             query: vector,
-            limit: 5,
+            limit: 10,
             with_payload: true
         })
         const endTime = Date.now()
@@ -23,12 +23,12 @@ export async function queryVectorDatabase(req, res, next) {
         // Actual code:
         next()
 
-        // Testing code:
-        // const filteredQueryAnswer = queryAnswer.points.map(point => ({
-        //     id: point.id,
-        //     score: point.score
-        // }))
-        // logger.single(`Response body (filtered):\n${JSON.stringify(filteredQueryAnswer)}`)
+        // Testing code (#2, #3):
+        const filteredQueryAnswer = queryAnswer.points.map(point => ({
+            id: point.id,
+            score: point.score
+        }))
+        logger.single(`Response body (filtered):\n${JSON.stringify(filteredQueryAnswer)}`)
         // res.status(201).json(filteredQueryAnswer)
     } catch (e) {
         console.error('Error querying the database:', e.message)
