@@ -1,8 +1,3 @@
-## Status
-
-🚧 **Work in Progress** 🚧  
-This project is currently under development. Features and functionality may change as work progresses. Contributions and feedback are welcome, but please note that the project is not yet complete.
-
 ## Installation
 
 Before you can run the project locally, ensure you have met the following prerequisites:
